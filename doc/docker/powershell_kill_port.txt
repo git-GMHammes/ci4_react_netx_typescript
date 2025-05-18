@@ -1,0 +1,76 @@
+
+net stop winnat
+net start winnat
+
+# Script para matar processos usando portas específicas
+Write-Host "Iniciando encerramento dos processos nas portas especificadas..." -ForegroundColor Cyan
+
+# Lista de portas a serem fechadas
+$portas = @(
+    56000,  # php:8.2-apache
+    56100,  # adminer
+    33610,  # mysql-nextjs
+    33611,  # mysql-qlikadmin
+    33612,  # mysql-sgp
+    33613,  # mysql-sgc
+    33614   # mysql-intranetdeegase
+)
+
+# Função para obter PID de processo usando determinada porta
+function Get-ProcessByPort {
+    param (
+        [int]$Port
+    )
+    
+    $netstatResult = netstat -ano | Select-String ":$Port "
+    if ($netstatResult) {
+        $pidPattern = '(\d+)$'
+        foreach ($line in $netstatResult) {
+            if ($line -match $pidPattern) {
+                return $matches[1]
+            }
+        }
+    }
+    return $null
+}
+
+# Para cada porta, encontra o processo e o encerra
+foreach ($porta in $portas) {
+    Write-Host "Verificando porta $porta..." -ForegroundColor Yellow
+    $pid = Get-ProcessByPort -Port $porta
+    
+    if ($pid) {
+        try {
+            $process = Get-Process -Id $pid -ErrorAction Stop
+            Write-Host "Processo encontrado na porta $porta - PID: $pid, Nome: $($process.ProcessName)" -ForegroundColor Green
+            
+            Stop-Process -Id $pid -Force -ErrorAction Stop
+            Write-Host "Processo encerrado com sucesso!" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "Erro ao encerrar processo na porta $porta (PID: $pid): $_" -ForegroundColor Red
+        }
+    }
+    else {
+        Write-Host "Nenhum processo encontrado utilizando a porta $porta" -ForegroundColor Gray
+    }
+}
+
+# Verifica se todos os processos foram realmente encerrados
+Write-Host "`nVerificando se as portas foram liberadas..." -ForegroundColor Cyan
+$portasAtivas = @()
+
+foreach ($porta in $portas) {
+    $pid = Get-ProcessByPort -Port $porta
+    if ($pid) {
+        $portasAtivas += $porta
+    }
+}
+
+if ($portasAtivas.Count -eq 0) {
+    Write-Host "Todas as portas foram liberadas com sucesso!" -ForegroundColor Green
+}
+else {
+    Write-Host "As seguintes portas ainda estão em uso: $($portasAtivas -join ', ')" -ForegroundColor Red
+    Write-Host "Pode ser necessário executar o script novamente com privilégios de administrador." -ForegroundColor Yellow
+}

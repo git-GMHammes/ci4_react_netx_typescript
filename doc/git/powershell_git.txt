@@ -1,0 +1,47 @@
+C:\laragon\www\ci4_react_netx_typescript\
+...
+ 
+C:\laragon\www\ci4_react_netx_typescript\
+ 
+clear
+ 
+C:\laragon\www\ci4_react_netx_typescript\doc\txt
+ 
+git --no-pager log --since="2025-04-06" --until="2025-04-08" --pretty=format:"%H" > gitLab20250407.txt
+ 
+clear
+  
+...
+ 
+clear
+ 
+C:\laragon\www\ci4_react_netx_typescript\Doc\txt
+$outFile = "gitLab2020407_show.txt"
+if (Test-Path $outFile) { Remove-Item $outFile } # Remove o arquivo se já existir
+$commits = @(
+    "46afda39cddc4613fb9c27e759ba1ae8d417e4d8",
+    "c9e40f3188bcb6ef9e1ea6c9fda64bbdcf630845"
+)
+foreach ($commit in $commits) {
+    Add-Content $outFile "git show --name-only $commit :: "
+    git --no-pager show --name-only $commit | Add-Content $outFile
+    Add-Content $outFile "`n"
+}
+clear 
+ 
+...
+ 
+clear
+ 
+C:\laragon\www\ci4_react_netx_typescript\doc\txt
+ 
+clear
+ 
+git -c core.pager=cat log --since="2025-04-06" --until="2025-04-08" --patch > gitLab20250407_detalhes.txt
+ 
+clear
+ 
+ ...
+ 
+Ctr+q para sair
+ 

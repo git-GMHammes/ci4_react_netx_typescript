@@ -1,0 +1,156 @@
+services:
+  php:
+    image: php:8.2-apache
+    container_name: nextjs-php
+    restart: always
+    ports:
+      - "127.0.0.1:56000:80"
+    volumes:
+      - ./src:/var/www/html/src
+    command: |
+      bash -c "
+      echo 'ServerName localhost' >> /etc/apache2/apache2.conf &&
+      apt-get update &&
+      apt-get install -y libicu-dev default-mysql-client &&
+      docker-php-ext-install intl pdo pdo_mysql mysqli &&
+      a2enmod rewrite &&
+      cat > /etc/apache2/sites-available/000-default.conf <<'EOL'
+      <VirtualHost *:80>
+          ServerAdmin webmaster@localhost
+          DocumentRoot /var/www/html
+          ServerName localhost
+
+          <Directory /var/www/html>
+              Options +Indexes +FollowSymLinks
+              AllowOverride All
+              Require all granted
+          </Directory>
+
+          ErrorLog \${APACHE_LOG_DIR}/error.log
+          CustomLog \${APACHE_LOG_DIR}/access.log combined
+      </VirtualHost>
+      EOL
+      apache2-foreground"
+    working_dir: /var/www/html
+    environment:
+      - PHP_MEMORY_LIMIT=256M
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+      - APACHE_LOG_DIR=/var/log/apache2
+    depends_on:
+      - mysql-nextjs
+
+  adminer:
+    image: adminer
+    container_name: nextjs-adminer
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql-nextjs
+      PMA_USER: root
+      PMA_PASSWORD: pass123
+    ports:
+      - "56100:8080"
+    depends_on:
+      - mysql-nextjs
+      - mysql-qlikadmin
+      - mysql-sgp
+      - mysql-sgc
+
+  # Banco de dados 1: nextjs
+  mysql-nextjs:
+    image: mysql:8.0
+    container_name: mysql-nextjs
+    restart: unless-stopped
+    command: |
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_DATABASE: nextjs
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_general_ci
+    ports:
+      - "33610:3306"
+    volumes:
+      - ./mysql/nextjs/mysql-data:/var/lib/mysql
+      - ./mysql/nextjs/mysql-init:/docker-entrypoint-initdb.d
+
+  # Banco de dados 2: qlikadmin
+  mysql-qlikadmin:
+    image: mysql:8.0
+    container_name: mysql-qlikadmin2
+    restart: unless-stopped
+    command: |
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_DATABASE: qlikadmin
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_general_ci
+    ports:
+      - "33611:3306"
+    volumes:
+      - ./mysql/qlikadmin/mysql-data:/var/lib/mysql
+      - ./mysql/qlikadmin/mysql-init:/docker-entrypoint-initdb.d
+
+  # Banco de dados 3: sgp
+  mysql-sgp:
+    image: mysql:8.0
+    container_name: mysql-sgp2
+    restart: unless-stopped
+    command: |
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_DATABASE: sgp
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_general_ci
+    ports:
+      - "33612:3306"
+    volumes:
+      - ./mysql/sgp/mysql-data:/var/lib/mysql
+      - ./mysql/sgp/mysql-init:/docker-entrypoint-initdb.d
+
+  # Banco de dados 4: sgc
+  mysql-sgc:
+    image: mysql:8.0
+    container_name: mysql-sgc2
+    restart: unless-stopped
+    command: |
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_DATABASE: sgc
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_general_ci
+    ports:
+      - "33613:3306"
+    volumes:
+      - ./mysql/sgc/mysql-data:/var/lib/mysql
+      - ./mysql/sgc/mysql-init:/docker-entrypoint-initdb.d
+
+  # Banco de dados 5: intranetdeegase
+  mysql-intranetdeegase:
+    image: mysql:8.0
+    container_name: mysql-intranetdeegase2
+    restart: unless-stopped
+    command: |
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_DATABASE: intranetdegase
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_general_ci
+    ports:
+      - "33614:3306"
+    volumes:
+      - ./mysql/intranetdeegase/mysql-data:/var/lib/mysql
+      - ./mysql/intranetdeegase/mysql-init:/docker-entrypoint-initdb.d
