@@ -1,0 +1,4 @@
+ 
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\script\my_modulo_v2
+npm run dev
+ 

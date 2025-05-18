@@ -1,0 +1,5 @@
+# Verifique a instalação com:
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\script
+node -v
+npm -v
+ 

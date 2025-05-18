@@ -1,0 +1,5 @@
+ 
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\script
+npx create-next-app@latest my_modulo_v2 --typescript
+cd my_modulo_v2
+ 
