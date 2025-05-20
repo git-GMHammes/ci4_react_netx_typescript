@@ -1,0 +1,3 @@
+# Verificando a instalação do Flutter
+flutter doctor
+ 
