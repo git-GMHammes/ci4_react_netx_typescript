@@ -1,0 +1,19 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.title {
+  color: #3498db;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: #555;
+  max-width: 800px;
+  line-height: 1.6;
+}

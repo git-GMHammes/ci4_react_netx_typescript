@@ -96,7 +96,7 @@ function exibirEstrutura($diretorio, $prefixo = '') {
 header('Content-Type: text/plain; charset=utf-8');
 
 // Exibe o cabeçalho
-echo "[REACT/FRONT] http:// + localhost ou 127.0.0.1 -- portas(7777 ou 9999)/" . PHP_EOL;
+echo "[NEXTJS] http:// + localhost ou 127.0.0.1 -- portas(7777 ou 9999)/" . PHP_EOL;
 echo "│" . PHP_EOL;
 echo "└── script\\" . PHP_EOL;
 

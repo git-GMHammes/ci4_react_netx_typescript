@@ -1,0 +1,21 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  color: #e74c3c;
+  font-size: 2.5rem;
+  border-bottom: 2px solid #e74c3c;
+  padding-bottom: 0.5rem;
+}
+
+.description {
+  color: #333;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

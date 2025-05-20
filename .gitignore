@@ -3,3 +3,4 @@ mysql/nextjs/mysql-data/*
 mysql/qlikadmin/mysql-data/*
 mysql/sgc/mysql-data/*
 mysql/sgp/mysql-data/*
+node_modules/*
