@@ -1,0 +1,49 @@
+# Verificar se o Flutter está instalado
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+flutter --version
+ 
+# Verificando a instalação do Flutter
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+flutter doctor
+ 
+# Verificar se o Dart está disponível:
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+dart --version
+ 
+# Verificar se o Android SDK está configurado:
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+flutter doctor --android-licenses
+
+# Criar um projeto teste para validar tudo:
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+flutter create modelo_v1
+cd modelo_v1
+flutter run
+ 
+# Verifique os dispositivos novamente
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+flutter devices
+ 
+# Force rodar no emulador Android
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v1
+flutter run -d android
+ 
+# Force rodar no emulador Android
+flutter run -d [ID_DO_EMULADOR]
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v1
+flutter run -d emulator-5554
+ 
+# Execute primeiro este comando no PowerShell
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+.\script_powershell.ps1
+ 

@@ -4,3 +4,4 @@ mysql/qlikadmin/mysql-data/*
 mysql/sgc/mysql-data/*
 mysql/sgp/mysql-data/*
 node_modules/*
+src/public/flutter/modelo_v1/*

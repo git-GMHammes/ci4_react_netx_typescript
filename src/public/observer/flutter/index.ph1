@@ -1,0 +1,251 @@
+<?php
+/**
+ * Script para exibir a estrutura de diretórios em formato de árvore
+ * Compatível com CodeIgniter 4
+ * Versão melhorada com tratamento de erros e segurança
+ */
+
+// Função para verificar se o diretório deve ser ignorado
+function deveIgnorarDiretorio($nomeDiretorio) {
+    $diretorios_ignorados = [
+        'node_modules',
+        'system',
+        'debugbar', 
+        'session',
+        'logs',
+        'uploads',
+        '.git',
+        'vendor',
+        'cache',
+        'writable/cache',
+        'writable/logs',
+        'writable/session',
+        'writable/debugbar'
+    ];
+    
+    return in_array($nomeDiretorio, $diretorios_ignorados);
+}
+
+// Função para verificar se o arquivo deve ser ignorado
+function deveIgnorarArquivo($nomeArquivo) {
+    $arquivos_ignorados = [
+        '.htaccess',
+        '.env',
+        '.gitignore',
+        'composer.lock',
+        'package-lock.json'
+    ];
+    
+    $extensoes_ignoradas = [
+        'log',
+        'tmp',
+        'cache'
+    ];
+    
+    if (in_array($nomeArquivo, $arquivos_ignorados)) {
+        return true;
+    }
+    
+    $extensao = strtolower(pathinfo($nomeArquivo, PATHINFO_EXTENSION));
+    return in_array($extensao, $extensoes_ignoradas);
+}
+
+// Função recursiva melhorada para exibir a estrutura
+function exibirEstrutura($diretorio, $prefixo = '', $nivel = 0) {
+    // Limite de profundidade para evitar loops infinitos
+    if ($nivel > 10) {
+        echo $prefixo . "... (limite de profundidade atingido)" . PHP_EOL;
+        return;
+    }
+    
+    // Verifica se o diretório existe e é legível
+    if (!is_dir($diretorio) || !is_readable($diretorio)) {
+        echo $prefixo . "❌ Diretório não acessível: " . basename($diretorio) . PHP_EOL;
+        return;
+    }
+    
+    // Verifica se deve ignorar este diretório
+    $dirName = basename($diretorio);
+    if (deveIgnorarDiretorio($dirName)) {
+        return;
+    }
+    
+    try {
+        // Lista os arquivos e pastas do diretório
+        $itens = scandir($diretorio);
+        if ($itens === false) {
+            echo $prefixo . "❌ Erro ao ler diretório: " . $dirName . PHP_EOL;
+            return;
+        }
+        
+        // Arrays para armazenar diretórios e arquivos separadamente
+        $diretorios = [];
+        $arquivos = [];
+        
+        // Separa e filtra diretórios e arquivos
+        foreach ($itens as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+            
+            $caminho = $diretorio . DIRECTORY_SEPARATOR . $item;
+            
+            if (is_dir($caminho)) {
+                if (!deveIgnorarDiretorio($item)) {
+                    $diretorios[] = $item;
+                }
+            } else {
+                if (!deveIgnorarArquivo($item)) {
+                    $arquivos[] = $item;
+                }
+            }
+        }
+        
+        // Ordena os arrays
+        sort($diretorios);
+        sort($arquivos);
+        
+        // Combina os arrays, diretórios primeiro
+        $todos = array_merge($diretorios, $arquivos);
+        $total = count($todos);
+        
+        // Exibe cada item
+        for ($i = 0; $i < $total; $i++) {
+            $item = $todos[$i];
+            $caminho = $diretorio . DIRECTORY_SEPARATOR . $item;
+            $isUltimo = ($i == $total - 1);
+            
+            // Símbolos da árvore
+            $simbolo = $isUltimo ? "└── " : "├── ";
+            echo $prefixo . $simbolo;
+            
+            if (is_dir($caminho)) {
+                // É um diretório
+                echo "📁 " . $item . DIRECTORY_SEPARATOR . PHP_EOL;
+                
+                // Prefixo para o próximo nível
+                $novoPrefixo = $prefixo . ($isUltimo ? "    " : "│   ");
+                
+                // Chamada recursiva
+                exibirEstrutura($caminho, $novoPrefixo, $nivel + 1);
+            } else {
+                // É um arquivo
+                $extensao = pathinfo($item, PATHINFO_EXTENSION);
+                $tamanho = filesize($caminho);
+                $tamanhoFormatado = formatarTamanho($tamanho);
+                
+                // Ícone baseado na extensão
+                $icone = obterIconeArquivo($extensao);
+                
+                echo $icone . " " . $item;
+                if ($extensao) {
+                    echo " (." . $extensao . ")";
+                }
+                echo " [" . $tamanhoFormatado . "]" . PHP_EOL;
+            }
+        }
+        
+    } catch (Exception $e) {
+        echo $prefixo . "❌ Erro: " . $e->getMessage() . PHP_EOL;
+    }
+}
+
+// Função para formatar tamanho de arquivo
+function formatarTamanho($bytes) {
+    if ($bytes < 1024) return $bytes . ' B';
+    if ($bytes < 1048576) return round($bytes / 1024, 1) . ' KB';
+    if ($bytes < 1073741824) return round($bytes / 1048576, 1) . ' MB';
+    return round($bytes / 1073741824, 1) . ' GB';
+}
+
+// Função para obter ícone baseado na extensão do arquivo
+function obterIconeArquivo($extensao) {
+    $icones = [
+        'php' => '🐘',
+        'js' => '📜',
+        'css' => '🎨',
+        'html' => '🌐',
+        'json' => '📋',
+        'xml' => '📄',
+        'txt' => '📝',
+        'md' => '📖',
+        'sql' => '🗃️',
+        'png' => '🖼️',
+        'jpg' => '🖼️',
+        'jpeg' => '🖼️',
+        'gif' => '🖼️',
+        'pdf' => '📕',
+        'zip' => '📦',
+        'dart' => '🎯'
+    ];
+    
+    return $icones[strtolower($extensao)] ?? '📄';
+}
+
+// Configuração de saída
+header('Content-Type: text/plain; charset=utf-8');
+
+// Cabeçalho informativo
+echo "🌳 ESTRUTURA DE DIRETÓRIOS - FLUTTER PROJECT" . PHP_EOL;
+echo "════════════════════════════════════════════" . PHP_EOL;
+echo "📍 Local: CodeIgniter 4 - Public Directory" . PHP_EOL;
+echo "⏰ Data: " . date('d/m/Y H:i:s') . PHP_EOL;
+echo "════════════════════════════════════════════" . PHP_EOL;
+echo PHP_EOL;
+
+// Caminho do diretório Flutter
+$caminhoFlutter = '../modelo_v1';
+
+// Debug: mostra informações do ambiente
+echo "🔍 INFORMAÇÕES DE DEBUG:" . PHP_EOL;
+echo "   • Diretório atual: " . __DIR__ . PHP_EOL;
+echo "   • Caminho procurado: " . $caminhoFlutter . PHP_EOL;
+echo "   • Caminho absoluto: " . realpath($caminhoFlutter) . PHP_EOL;
+echo "   • Existe? " . (file_exists($caminhoFlutter) ? "✅ SIM" : "❌ NÃO") . PHP_EOL;
+echo PHP_EOL;
+
+// Verifica se o diretório existe
+if (!file_exists($caminhoFlutter)) {
+    echo "❌ ERRO: Diretório modelo_v1 não encontrado!" . PHP_EOL;
+    echo "📂 Caminho procurado: " . realpath('.') . PHP_EOL;
+    echo PHP_EOL;
+    
+    // Lista o conteúdo do diretório atual para debug
+    echo "📁 Conteúdo do diretório atual (observer/flutter/):" . PHP_EOL;
+    $itensAtual = scandir('.');
+    foreach ($itensAtual as $item) {
+        if ($item !== '.' && $item !== '..') {
+            echo "   • " . $item . (is_dir($item) ? '/' : '') . PHP_EOL;
+        }
+    }
+    echo PHP_EOL;
+    
+    // Lista o diretório pai
+    echo "📁 Conteúdo do diretório pai (public/):" . PHP_EOL;
+    $itensPai = scandir('..');
+    foreach ($itensPai as $item) {
+        if ($item !== '.' && $item !== '..') {
+            echo "   • " . $item . (is_dir('../' . $item) ? '/' : '') . PHP_EOL;
+        }
+    }
+    
+    echo PHP_EOL;
+    echo "💡 Dicas para resolver:" . PHP_EOL;
+    echo "   • Verifique se o caminho está correto" . PHP_EOL;
+    echo "   • Confirme se o diretório modelo_v1 existe" . PHP_EOL;
+    echo "   • Teste com caminho absoluto" . PHP_EOL;
+    exit;
+}
+
+// Exibe o diretório raiz
+echo "📁 modelo_v1/" . PHP_EOL;
+echo "│" . PHP_EOL;
+
+// Exibe a estrutura
+exibirEstrutura($caminhoFlutter, "");
+
+echo PHP_EOL;
+echo "════════════════════════════════════════════" . PHP_EOL;
+echo "✅ Estrutura exibida com sucesso!" . PHP_EOL;
+echo "🔗 Acesse: http://127.0.0.1:56000/src/public/flutter/" . PHP_EOL;
+?>
