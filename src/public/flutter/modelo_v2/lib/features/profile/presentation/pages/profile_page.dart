@@ -1,0 +1,13 @@
+import 'package:flutter/material.dart';
+import '../../../../shared/components/app_menu.dart';
+
+class ProfilePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Perfil')),
+      body: Center(child: Text('Página de Perfil')),
+      bottomNavigationBar: AppMenu(),
+    );
+  }
+}

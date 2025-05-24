@@ -5,3 +5,9 @@ mysql/sgc/mysql-data/*
 mysql/sgp/mysql-data/*
 node_modules/*
 src/public/flutter/modelo_v1/*
+src/public/flutter/modelo_v2/android/*
+src/public/flutter/modelo_v2/ios/*
+src/public/flutter/modelo_v2/linux/*
+src/public/flutter/modelo_v2/macos/*
+src/public/flutter/modelo_v2/web/*
+src/public/flutter/modelo_v2/windows/*

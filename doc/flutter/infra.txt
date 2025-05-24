@@ -1,44 +1,83 @@
 # Verificar se o Flutter está instalado
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
 flutter --version
  
 # Verificando a instalação do Flutter
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
 flutter doctor
  
 # Verificar se o Dart está disponível:
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
 dart --version
  
 # Verificar se o Android SDK está configurado:
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
 flutter doctor --android-licenses
-
+ 
 # Criar um projeto teste para validar tudo:
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\
-flutter create modelo_v1
-cd modelo_v1
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+flutter create modelo_v2
+cd modelo_v2
 flutter run
+ 
+# Execute primeiro este comando no PowerShell
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+dir
+ 
+.\script_powershell.ps1
+  
+======================================
+ 
+# Instalações de Extensões:
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2
+flutter pub add http
+flutter pub add flutter_stripe
+flutter pub add flutter_map
+flutter pub add geolocator
+flutter pub add permission_handler
+flutter pub add audioplayers
+flutter pub add video_player
+flutter pub add go_router
+flutter clean
+flutter pub get
+
+======================================
+ 
+# Analise de Extensões:
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2
+flutter pub deps
+  
+======================================
+ 
+# Executa o Projeto:
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2
+flutter run
+ 
+======================================
  
 # Verifique os dispositivos novamente
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
 flutter devices
  
 # Force rodar no emulador Android
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\modelo_v1
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2
 flutter run -d android
  
 # Force rodar no emulador Android
 flutter run -d [ID_DO_EMULADOR]
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\doc\flutter\modelo_v1
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2
 flutter run -d emulator-5554
- 
  

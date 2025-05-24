@@ -2,7 +2,7 @@
 # Seguindo as melhores praticas de desenvolvimento
 
 # Definir o caminho base
-$basePath = "C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v1"
+$basePath = "C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2"
 
 # Funcao para criar diretorio se nao existir
 function New-DirectoryIfNotExists {
@@ -41,6 +41,7 @@ New-DirectoryIfNotExists "$basePath\lib\core\theme"
 New-DirectoryIfNotExists "$basePath\lib\core\utils"
 New-DirectoryIfNotExists "$basePath\lib\core\extensions"
 New-DirectoryIfNotExists "$basePath\lib\core\validators"
+New-DirectoryIfNotExists "$basePath\lib\core\routers"
 
 # Data Layer - Camada de dados
 New-DirectoryIfNotExists "$basePath\lib\data"
@@ -440,6 +441,105 @@ coverage/
 "@
 
 New-FileIfNotExists "$basePath\.gitignore" $gitignoreContent
+
+# Gera a estrutura padrao de um projeto Flutter modular e explica cada pasta/arquivo em ate 3 palavras
+
+$estrutura = @"
+|
+[FLUTTER]/
+|
++-- script/
+    +-- modelo_v2/
+        |-- .dart_tool/             # Ferramentas Dart
+        |-- .idea/                  # Config. IDE Jetbrains
+        |-- android/                # Projeto Android
+        |-- assets/                 # Recursos app
+        |   |-- animations/         # Animacoes
+        |   |-- fonts/              # Fontes
+        |   |-- images/             # Imagens
+        |   |   |-- backgrounds/    # Fundos
+        |   |   |-- icons/          # Icones
+        |   |   +-- logos/          # Logos
+        |   |-- json/               # Arquivos JSON
+        |   +-- translations/       # Traducoes
+        |-- build/                  # Arquivos gerados
+        |-- docs/                   # Documentacao
+        |   |-- api/                # Doc API
+        |   |-- architecture/       # Arquitetura
+        |   |-- guides/             # Guias
+        |   +-- screenshots/        # Capturas tela
+        |-- ios/                    # Projeto iOS
+        |-- lib/                    # Codigo fonte
+        |   |-- core/               # Nucleo utilidade
+        |   |   |-- constants/      # Constantes globais
+        |   |   |   |-- app_constants.dart      # Constantes app
+        |   |   |   +-- app_strings.dart        # Textos app
+        |   |   |-- errors/         # Erros
+        |   |   |-- extensions/     # Extensoes Dart
+        |   |   |-- network/        # Rede
+        |   |   |-- theme/          # Temas visuais
+        |   |   |   |-- app_colors.dart         # Cores app
+        |   |   |   +-- app_theme.dart          # Tema app
+        |   |   |-- utils/          # Utilitarios gerais
+        |   |   +-- validators/     # Validacoes
+        |   |-- data/               # Implementacao dados
+        |   |   |-- datasources/    # Fontes dados
+        |   |   |   |-- local/      # Dados locais
+        |   |   |   +-- remote/     # Dados remotos
+        |   |   |-- models/         # Modelos dados
+        |   |   +-- repositories/   # Repositorios dados
+        |   |-- domain/             # Regras negocio
+        |   |   |-- entities/       # Entidades
+        |   |   |-- repositories/   # Interface repos
+        |   |   +-- usecases/       # Casos uso
+        |   |-- features/           # Funcionalidades
+        |   |   |-- auth/           # Autenticacao
+        |   |   |   |-- data/
+        |   |   |   |-- domain/
+        |   |   |   +-- presentation/
+        |   |   |-- home/           # Tela inicial
+        |   |   |   |-- data/
+        |   |   |   |-- domain/
+        |   |   |   +-- presentation/
+        |   |   +-- profile/        # Perfil usuario
+        |   |       |-- data/
+        |   |       |-- domain/
+        |   |       +-- presentation/
+        |   |-- presentation/       # Camada visual
+        |   |   |-- blocs/          # Gestao estado
+        |   |   |-- controllers/    # Controladores
+        |   |   |-- pages/          # Paginas app
+        |   |   |   +-- home_page.dart           # Pagina home
+        |   |   |-- providers/      # Injecao depend
+        |   |   +-- widgets/        # Widgets visuais
+        |   |-- services/           # Servicos app
+        |   |   |-- analytics/      # Metricas
+        |   |   |-- api/            # API REST
+        |   |   |-- authentication/ # Autenticacao
+        |   |   |-- notifications/  # Notificacoes
+        |   |   +-- storage/        # Armazenamento
+        |   |-- shared/             # Compartilhados
+        |   |   |-- components/     # Componentes
+        |   |   |-- enums/          # Enumeracoes
+        |   |   |-- mixins/         # Mixins Dart
+        |   |   +-- widgets/        # Widgets globais
+        |   +-- main.dart           # App principal
+        |-- linux/                  # Projeto Linux
+        |-- macos/                  # Projeto macOS
+        |-- test/                   # Testes automatizados
+        |-- web/                    # Projeto web
+        |-- windows/                # Projeto Windows
+        |-- .gitignore              # Ignorar arquivos
+        |-- .metadata               # Metadados Flutter
+        |-- README.md               # Sobre projeto
+        |-- analysis_options.yaml   # Regras analise
+        |-- modelo_v2.iml           # Projeto IDE
+        |-- pubspec.lock            # Travamento deps
+        +-- pubspec.yaml            # Dependências app
+        |
+"@
+
+Write-Host $estrutura
 
 Write-Host "`n===========================================" -ForegroundColor Cyan
 Write-Host "ESTRUTURA FLUTTER CRIADA COM SUCESSO!" -ForegroundColor Green
