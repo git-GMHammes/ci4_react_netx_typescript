@@ -5,9 +5,16 @@ class AppMenu extends StatelessWidget {
   const AppMenu({super.key});
 
   static const List<NavigationItem> _items = [
-    NavigationItem(route: '/', icon: Icons.home, label: 'Home'),
+    NavigationItem(route: '/', icon: Icons.lock, label: 'Login'),
+    NavigationItem(route: '/home', icon: Icons.home, label: 'Home'),
     NavigationItem(route: '/profile', icon: Icons.person, label: 'Profile'),
-    NavigationItem(route: '/contato', icon: Icons.account_circle, label: 'Contato'),
+    NavigationItem(
+      route: '/contato',
+      icon: Icons.account_circle,
+      label: 'Contato',
+    ),
+    NavigationItem(route: '/contato/salvar', icon: Icons.save, label: 'Salvar'),
+    NavigationItem(route: '/geolocationmap', icon: Icons.map, label: 'Geolocalização'),
   ];
 
   @override
@@ -15,7 +22,9 @@ class AppMenu extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: _getSelectedIndex(context),
       onTap: (index) => context.go(_items[index].route),
-      type: BottomNavigationBarType.fixed, // Para mais de 3 itens testar com .shifting
+      type:
+          BottomNavigationBarType
+              .fixed, // Para mais de 3 itens testar com .shifting
       items:
           _items
               .map(
