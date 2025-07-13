@@ -10,6 +10,7 @@ docker stop $(docker ps -aq)
 docker-compose up --build -d
 
 cd C:\laragon\www\ci4_react_netx_typescript\
+docker-compose build --no-cache
 docker-compose up --build -d
  
 ### Destroi TUDO e limpa o ambiente:
