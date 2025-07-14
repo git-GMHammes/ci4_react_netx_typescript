@@ -12,9 +12,7 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: appRouter,
       title: 'Modelo v2',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
     );
   }
 }
