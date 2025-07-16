@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class GeolocationMapPage extends StatefulWidget {
-  const GeolocationMapPage({Key? key}) : super(key: key);
+  const GeolocationMapPage({super.key});
 
   @override
   State<GeolocationMapPage> createState() => _GeolocationMapPageState();
@@ -41,6 +41,7 @@ class _GeolocationMapPageState extends State<GeolocationMapPage> {
         _isLoading = false;
         _locationPermissionDenied = true;
       });
+
       return;
     }
 
@@ -75,6 +76,15 @@ class _GeolocationMapPageState extends State<GeolocationMapPage> {
         _currentPosition = LatLng(position.latitude, position.longitude);
         _isLoading = false;
       });
+
+      // ALERTA AO USUÁRIO
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Sua localização:\nLat: ${position.latitude}, Lng: ${position.longitude}',
+          ),
+        ),
+      );
 
       // Centralizar mapa na posição atual
       _mapController.move(_currentPosition, 15.0);
