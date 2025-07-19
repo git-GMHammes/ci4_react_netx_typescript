@@ -6,39 +6,45 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Perfil')),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 100,
-                height: 150,
-                margin: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 150,
+                  height: 230,
+                  margin: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: const Center(child: Text('1')),
                 ),
-                child: const Center(child: Text('1')),
-              ),
-              Container(
-                width: 275,
-                height: 150,
-                margin: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
+                Expanded(
+                  child: Container(
+                    width: 275,
+                    height: 230,
+                    margin: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                    ),
+                    child: const Center(child: Text('2')),
+                  ),
                 ),
-                child: const Center(child: Text('2')),
+              ],
+            ),
+            Container(
+              width: double.infinity,
+              height: 230,
+              margin: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
               ),
-            ],
-          ),
-          Container(
-            width: double.infinity,
-            height: 540,
-            margin: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-            child: const Center(child: Text('3')),
-          ),
-        ],
+              child: const Center(child: Text('3')),
+            ),
+          ],
+        ),
       ),
     );
   }
