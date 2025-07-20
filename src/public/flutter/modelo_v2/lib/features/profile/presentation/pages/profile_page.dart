@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
 
-            if (_screenHeight > 900)
+            if (_screenHeight > 750)
             Column(
               children: [
                 buildContainerNoInfinity('1', _screenWidth, _screenHeight),

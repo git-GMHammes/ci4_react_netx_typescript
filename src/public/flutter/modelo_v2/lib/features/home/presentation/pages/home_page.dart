@@ -99,10 +99,10 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (_screenHeight > 900)
+                if (_screenHeight > 750)
                   buildContainerCollor('1', _screenWidth, _screenHeight),
 
-                if (_screenHeight > 900)
+                if (_screenHeight > 750)
                   buildContainerCollor('2', _screenWidth, _screenHeight),
 
                 if (_screenWidth > 412)
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                   buildContainer('4', _screenWidth, _screenHeight),
               ],
             ),
-            if (_screenHeight > 900)
+            if (_screenHeight > 750)
               buildContainerInfinity('3', _screenWidth, _screenHeight),
           ],
         ),
