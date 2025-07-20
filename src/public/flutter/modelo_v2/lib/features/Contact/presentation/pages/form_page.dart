@@ -42,9 +42,7 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Cálculo do tamanho para o círculo perfeito baseado na largura da tela
-    final screenWidth = MediaQuery.of(context).size.width;
-    final circleSize = screenWidth * 0.8;
+    final circleSize = 200.0;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Formulário de Contato')),
@@ -59,32 +57,15 @@ class _FormPageState extends State<FormPage> {
                 // Ícone circular de contato
                 Center(
                   child: Container(
-                    width: circleSize,
-                    height: circleSize,
                     margin: const EdgeInsets.only(bottom: 24.0),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Theme.of(context).primaryColor,
-                          Theme.of(context).primaryColor.withOpacity(0.7),
-                        ],
+                    child: CircleAvatar(
+                      radius: 100,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: Icon(
+                        Icons.contact_page,
+                        size: 160,
+                        color: Colors.white,
                       ),
-                    ),
-                    child: Icon(
-                      Icons.contact_page,
-                      size: circleSize * 0.8,
-                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -198,12 +179,17 @@ class _FormPageState extends State<FormPage> {
                 ),
                 const SizedBox(height: 24.0),
 
-                ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                Container(
+                  margin: const EdgeInsets.only(
+                    bottom: 48.0,
+                  ), // margem inferior
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    ),
+                    child: const Text('ENVIAR', style: TextStyle(fontSize: 18)),
                   ),
-                  child: const Text('ENVIAR', style: TextStyle(fontSize: 18)),
                 ),
               ],
             ),

@@ -4,8 +4,8 @@ import 'package:modelo_v2/features/auth/presentation/pages/auth_page.dart';
 import 'package:modelo_v2/features/geolocationmap/presentation/pages/geolocationmap_page.dart';
 import 'package:modelo_v2/features/home/presentation/pages/home_page.dart';
 import 'package:modelo_v2/features/profile/presentation/pages/profile_page.dart';
-import 'package:modelo_v2/features/contato/presentation/pages/contato_page.dart';
-import 'package:modelo_v2/features/contato/presentation/pages/form_page.dart';
+import 'package:modelo_v2/features/Contact/presentation/pages/contactList_page.dart';
+import 'package:modelo_v2/features/Contact/presentation/pages/form_page.dart';
 import 'package:modelo_v2/shared/layouts/shell_layout.dart';
 
 // Navegadores para estrutura de shell
