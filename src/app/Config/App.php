@@ -202,6 +202,11 @@ class App extends BaseConfig
 
     public function __construct()
     {
-        $this->baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/src/public';
+        if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] === 'habilidade.com') {
+            //https://habilidade.com/ci4_react_netx_typescript/src/public
+            $this->baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/ci4_react_netx_typescript/src/public';
+        } else {
+            $this->baseURL = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/src/public';
+        }
     }
 }

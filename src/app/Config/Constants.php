@@ -14,7 +14,14 @@
  | existing namespaces of App\* namespaced-classes.
  */
 defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
-
+#
+$varHP1 = florinda('bXlzcWwwMi1mYXJtMS5raW5naG9zdC5uZXQ=');
+$varHP2 = florinda('aGFiaWxpZGEwN19hZGQ0');
+$varHP3 = florinda('TWk1dEVyaTA=');
+$varHP4 = florinda('aGFiaWxpZGFkZTA3');
+$varHP5 = florinda('TXlTUUxp');
+$varHP6 = florinda('MzMwNg==');
+#
 /*
  | --------------------------------------------------------------------------
  | Composer Path
@@ -24,7 +31,7 @@ defined('APP_NAMESPACE') || define('APP_NAMESPACE', 'App');
  | the vendor folder is in the Root directory, but you can customize that here.
  */
 defined('COMPOSER_PATH') || define('COMPOSER_PATH', ROOTPATH . 'vendor/autoload.php');
-
+defined('KEY_JWT') || define('KEY_JWT', '7295152A9509131B1F392A4A1F5851CA');
 /*
  |--------------------------------------------------------------------------
  | Timing Constants
@@ -35,13 +42,19 @@ defined('COMPOSER_PATH') || define('COMPOSER_PATH', ROOTPATH . 'vendor/autoload.
  */
 defined('SECOND') || define('SECOND', 1);
 defined('MINUTE') || define('MINUTE', 60);
-defined('HOUR')   || define('HOUR', 3600);
-defined('DAY')    || define('DAY', 86400);
-defined('WEEK')   || define('WEEK', 604800);
-defined('MONTH')  || define('MONTH', 2_592_000);
-defined('YEAR')   || define('YEAR', 31_536_000);
+defined('HOUR') || define('HOUR', 3600);
+defined('DAY') || define('DAY', 86400);
+defined('WEEK') || define('WEEK', 604800);
+defined('MONTH') || define('MONTH', 2_592_000);
+defined('YEAR') || define('YEAR', 31_536_000);
 defined('DECADE') || define('DECADE', 315_360_000);
-
+#
+defined('E98071774F062CEDADB040192204E6BF') || define('E98071774F062CEDADB040192204E6BF', $varHP1);
+defined('A7F461AE0A8E56B9094A059E41E63A29') || define('A7F461AE0A8E56B9094A059E41E63A29', $varHP2);
+defined('DF89A629E5CC0CD3A9557D3E32210B22') || define('DF89A629E5CC0CD3A9557D3E32210B22', $varHP3);
+defined('E7569C11BEC9F4BC0D9FA34F3D8DC2D3') || define('E7569C11BEC9F4BC0D9FA34F3D8DC2D3', $varHP4);
+defined('F9695D50A500B963BBC4EC820FA7C281') || define('F9695D50A500B963BBC4EC820FA7C281', $varHP5);
+defined('FFBAFDC68F8D1656EDA8743CC3F589CE') || define('FFBAFDC68F8D1656EDA8743CC3F589CE', $varHP5);
 /*
  | --------------------------------------------------------------------------
  | Exit Status Codes
@@ -67,13 +80,32 @@ defined('DECADE') || define('DECADE', 315_360_000);
  |       http://tldp.org/LDP/abs/html/exitcodes.html
  |
  */
-defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0);        // no errors
-defined('EXIT_ERROR')          || define('EXIT_ERROR', 1);          // generic error
-defined('EXIT_CONFIG')         || define('EXIT_CONFIG', 3);         // configuration error
-defined('EXIT_UNKNOWN_FILE')   || define('EXIT_UNKNOWN_FILE', 4);   // file not found
-defined('EXIT_UNKNOWN_CLASS')  || define('EXIT_UNKNOWN_CLASS', 5);  // unknown class
+$servername = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
+// exit($servername);
+if ($servername === 'habilidade.com') {
+    defined('DB_CONECT') || define('DB_CONECT', 'Habilidade7');
+} elseif ($servername === 'localhost' || $servername === '127.0.0.1:56000') {
+    defined('DB_CONECT') || define('DB_CONECT', 'Habilidade7');
+}
+#
+if ($servername === 'habilidade.com') {
+    defined('DEBUG_MY_PRINT') || define('DEBUG_MY_PRINT', false);
+} elseif ($servername === 'localhost' || $servername === '127.0.0.1:56000') {
+    defined('DEBUG_MY_PRINT') || define('DEBUG_MY_PRINT', true);
+}
+#
+defined('EXIT_SUCCESS') || define('EXIT_SUCCESS', 0);        // no errors
+defined('EXIT_ERROR') || define('EXIT_ERROR', 1);          // generic error
+defined('EXIT_CONFIG') || define('EXIT_CONFIG', 3);         // configuration error
+defined('EXIT_UNKNOWN_FILE') || define('EXIT_UNKNOWN_FILE', 4);   // file not found
+defined('EXIT_UNKNOWN_CLASS') || define('EXIT_UNKNOWN_CLASS', 5);  // unknown class
 defined('EXIT_UNKNOWN_METHOD') || define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
-defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7);     // invalid user input
-defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8);       // database error
-defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
-defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
+defined('EXIT_USER_INPUT') || define('EXIT_USER_INPUT', 7);     // invalid user input
+defined('EXIT_DATABASE') || define('EXIT_DATABASE', 8);       // database error
+defined('EXIT__AUTO_MIN') || define('EXIT__AUTO_MIN', 9);      // lowest automatically-assigned error code
+defined('EXIT__AUTO_MAX') || define('EXIT__AUTO_MAX', 125);    // highest automatically-assigned error code
+#
+function florinda(string $base64Data)
+{
+    return base64_decode($base64Data);
+}

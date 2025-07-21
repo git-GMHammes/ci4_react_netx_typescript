@@ -9,6 +9,43 @@
 
 <body style="background-color: black; color: white;">
     <?php
+    $dataBaseConfig1 = [
+        'servidor' => 'mysql02-farm1.kinghost.net',
+        'username' => 'habilida07_add4',
+        'password' => 'Mi5tEri0',
+        'database' => 'habilidade07',
+        'DBDriver' => 'MySQLi',
+        'port' => 3306,
+    ];
+
+    $dataBaseConfig2 = [
+        'servidor' => encodeToBase64('mysql02-farm1.kinghost.net'),
+        'username' => encodeToBase64('habilida07_add4'),
+        'password' => encodeToBase64('Mi5tEri0'),
+        'database' => encodeToBase64('habilidade07'),
+        'DBDriver' => encodeToBase64('MySQLi'),
+        'port' => encodeToBase64(3306),
+    ];
+    function encodeToBase64(string $data): string
+    {
+        return base64_encode($data);
+    }
+    function decodeFromBase64(string $base64Data)
+    {
+        return base64_decode($base64Data);
+    }
+    ?>
+    <pre>
+    <?php
+    print_r($dataBaseConfig1);
+    ?>
+    </pre>
+    <pre>
+    <?php
+    print_r($dataBaseConfig2);
+    ?>
+    </pre>
+    <?php
 
     /**
      * Função que retorna o timestamp atual em formato MD5 e convertido para maiúsculas
