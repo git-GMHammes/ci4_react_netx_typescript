@@ -1,0 +1,61 @@
+INFO - 2025-07-22 00:27:37 --> REDIRECTED ROUTE at http://127.0.0.1:56000/src/public/home
+CRITICAL - 2025-07-22 01:35:34 --> Error: Call to a member function valid_token_csrf() on null
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Controllers/AccountManagement/ApiController.php on line 84.
+ 1 APPPATH/Controllers/AccountManagement/ApiController.php(145): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', [...])
+ 2 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+ 3 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+ 4 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-22 01:37:37 --> Error: Class "App\Controllers\Pattern\MessageController" not found
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Controllers/Pattern/TokenCsrfController.php on line 18.
+ 1 APPPATH/Controllers/AccountManagement/ApiController.php(27): App\Controllers\Pattern\TokenCsrfController->__construct()
+ 2 SYSTEMPATH/CodeIgniter.php(903): App\Controllers\AccountManagement\ApiController->__construct()
+ 3 SYSTEMPATH/CodeIgniter.php(498): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-22 01:38:00 --> Error: Class "App\Controllers\Pattern\MessageController" not found
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Controllers/Pattern/TokenCsrfController.php on line 18.
+ 1 APPPATH/Controllers/AccountManagement/ApiController.php(27): App\Controllers\Pattern\TokenCsrfController->__construct()
+ 2 SYSTEMPATH/CodeIgniter.php(903): App\Controllers\AccountManagement\ApiController->__construct()
+ 3 SYSTEMPATH/CodeIgniter.php(498): CodeIgniter\CodeIgniter->createController()
+ 4 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-22 01:39:19 --> Error: Class "App\Controllers\Pattern\SystemMessageController" not found
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Controllers/AccountManagement/ApiController.php on line 28.
+ 1 SYSTEMPATH/CodeIgniter.php(903): App\Controllers\AccountManagement\ApiController->__construct()
+ 2 SYSTEMPATH/CodeIgniter.php(498): CodeIgniter\CodeIgniter->createController()
+ 3 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-07-22 01:39:46 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:40:42 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:42:17 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:42:31 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:42:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:43:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:44:05 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:46:43 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:47:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:47:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-22 01:48:34 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2025-07-22 01:52:47 --> Error: Call to a member function dbCreate() on null
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Controllers/AccountManagement/ApiController.php on line 101.
+ 1 APPPATH/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', [...])
+ 2 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+ 3 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+ 4 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

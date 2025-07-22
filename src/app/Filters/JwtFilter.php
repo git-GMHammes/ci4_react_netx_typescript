@@ -14,7 +14,13 @@ class JwtFilter implements FilterInterface
     {
         $uri = new \CodeIgniter\HTTP\URI(current_url());
         $filtro = $uri->getSegments();
-        if (in_array('anonymous', $filtro) && in_array('obsolete', $filtro)) {
+        $server = base_url();
+        if (
+            in_array('anonymous', $filtro)
+            && in_array('obsolete', $filtro)
+            || in_array('home', $filtro)
+            || $server === 'http://127.0.0.1:56000/src/public/'
+        ) {
             return;
         }
         // Incluindo os arquivos manualmente
@@ -34,8 +40,13 @@ class JwtFilter implements FilterInterface
 
         // Verifica se o cabeçalho de autorização está no formato correto
         if (count($arr) != 2) {
+            $request = service('request');
+            $apiRespond['getMethod'] = $request->getMethod();
+            $apiRespond['method'] = __METHOD__;
+            $apiRespond['function'] = __FUNCTION__;
+            $apiRespond['message'] = '403 Forbidden - Directory access is forbidden.';
             $response = Services::response();
-            return $response->setJSON(['error' => 'Invalid authorization header'])->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
+            return $response->setJSON($apiRespond)->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
         }
 
         $token = $arr[1];

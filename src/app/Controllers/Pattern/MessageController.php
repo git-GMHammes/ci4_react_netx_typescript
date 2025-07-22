@@ -5,7 +5,7 @@ namespace App\Controllers\Pattern;
 use CodeIgniter\Controller;
 use Exception;
 
-class SystemMessageController extends Controller
+class MessageController extends Controller
 {
     private $message;
     public function __construct()

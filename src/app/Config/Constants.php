@@ -89,7 +89,7 @@ if ($servername === 'habilidade.com') {
 }
 #
 if ($servername === 'habilidade.com') {
-    defined('DEBUG_MY_PRINT') || define('DEBUG_MY_PRINT', false);
+    defined('DEBUG_MY_PRINT') || define('DEBUG_MY_PRINT', true);
 } elseif ($servername === 'localhost' || $servername === '127.0.0.1:56000') {
     defined('DEBUG_MY_PRINT') || define('DEBUG_MY_PRINT', true);
 }
