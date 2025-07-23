@@ -1,1 +1,176 @@
 INFO - 2025-07-23 00:12:58 --> REDIRECTED ROUTE at http://127.0.0.1:56000/src/public/home
+ERROR - 2025-07-23 00:23:09 --> Error connecting to the database: TypeError: mysqli::real_connect(): Argument #5 ($port) must be of type ?int, string given in /var/www/html/src/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/src/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('mysql02-farm1.k...', 'habilida07_add4', Object(SensitiveParameterValue), 'habilidade07', 'MySQLi', '', 0)
+#1 /var/www/html/src/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/src/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/src/system/Model.php(924): CodeIgniter\Database\BaseConnection->query('SELECT COLUMN_N...')
+#4 /var/www/html/src/app/Models/BaseCrudModel.php(48): CodeIgniter\Model->__call('query', Array)
+#5 /var/www/html/src/app/Models/UserManagementModels.php(37): App\Models\BaseCrudModel->getColumnsFromTable('user_management', 'id', 'column', 'value_type', 'value_key')
+#6 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(49): App\Models\UserManagementModels->getColumnsFromTable()
+#7 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(87): App\Controllers\AccountManagement\DbController->dbFields(Array)
+#8 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate(Array)
+#9 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', Array)
+#10 /var/www/html/src/system/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+#11 /var/www/html/src/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+#12 /var/www/html/src/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#13 /var/www/html/src/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#14 /var/www/html/src/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#15 /var/www/html/src/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: mysqli::real_connect(): Argument #5 ($port) must be of type ?int, string given in /var/www/html/src/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/src/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/src/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/src/system/Model.php(924): CodeIgniter\Database\BaseConnection->query('SELECT COLUMN_N...')
+#3 /var/www/html/src/app/Models/BaseCrudModel.php(48): CodeIgniter\Model->__call('query', Array)
+#4 /var/www/html/src/app/Models/UserManagementModels.php(37): App\Models\BaseCrudModel->getColumnsFromTable('user_management', 'id', 'column', 'value_type', 'value_key')
+#5 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(49): App\Models\UserManagementModels->getColumnsFromTable()
+#6 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(87): App\Controllers\AccountManagement\DbController->dbFields(Array)
+#7 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate(Array)
+#8 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', Array)
+#9 /var/www/html/src/system/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+#10 /var/www/html/src/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+#11 /var/www/html/src/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 /var/www/html/src/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 /var/www/html/src/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 /var/www/html/src/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+ERROR - 2025-07-23 00:31:08 --> Error connecting to the database: TypeError: mysqli::real_connect(): Argument #5 ($port) must be of type ?int, string given in /var/www/html/src/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/src/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('mysql02-farm1.k...', 'habilida07_add4', Object(SensitiveParameterValue), 'habilidade07', '3306', '', 0)
+#1 /var/www/html/src/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/src/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/src/system/Model.php(924): CodeIgniter\Database\BaseConnection->query('SELECT COLUMN_N...')
+#4 /var/www/html/src/app/Models/BaseCrudModel.php(48): CodeIgniter\Model->__call('query', Array)
+#5 /var/www/html/src/app/Models/UserManagementModels.php(37): App\Models\BaseCrudModel->getColumnsFromTable('user_management', 'id', 'column', 'value_type', 'value_key')
+#6 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(49): App\Models\UserManagementModels->getColumnsFromTable()
+#7 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(87): App\Controllers\AccountManagement\DbController->dbFields(Array)
+#8 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate(Array)
+#9 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', Array)
+#10 /var/www/html/src/system/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+#11 /var/www/html/src/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+#12 /var/www/html/src/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#13 /var/www/html/src/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#14 /var/www/html/src/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#15 /var/www/html/src/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: mysqli::real_connect(): Argument #5 ($port) must be of type ?int, string given in /var/www/html/src/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/src/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/src/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/src/system/Model.php(924): CodeIgniter\Database\BaseConnection->query('SELECT COLUMN_N...')
+#3 /var/www/html/src/app/Models/BaseCrudModel.php(48): CodeIgniter\Model->__call('query', Array)
+#4 /var/www/html/src/app/Models/UserManagementModels.php(37): App\Models\BaseCrudModel->getColumnsFromTable('user_management', 'id', 'column', 'value_type', 'value_key')
+#5 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(49): App\Models\UserManagementModels->getColumnsFromTable()
+#6 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(87): App\Controllers\AccountManagement\DbController->dbFields(Array)
+#7 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate(Array)
+#8 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', Array)
+#9 /var/www/html/src/system/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+#10 /var/www/html/src/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+#11 /var/www/html/src/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 /var/www/html/src/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 /var/www/html/src/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 /var/www/html/src/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+CRITICAL - 2025-07-23 00:34:42 --> ErrorException: Constant expression contains invalid operations
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Config/Database.php on line 59.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+ERROR - 2025-07-23 00:38:43 --> Error connecting to the database: TypeError: mysqli::real_connect(): Argument #5 ($port) must be of type ?int, string given in /var/www/html/src/system/Database/MySQLi/Connection.php:201
+Stack trace:
+#0 /var/www/html/src/system/Database/MySQLi/Connection.php(201): mysqli->real_connect('mysql02-farm1.k...', 'habilida07_add4', Object(SensitiveParameterValue), 'habilidade07', '3306', '', 0)
+#1 /var/www/html/src/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 /var/www/html/src/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#3 /var/www/html/src/system/Model.php(924): CodeIgniter\Database\BaseConnection->query('SELECT COLUMN_N...')
+#4 /var/www/html/src/app/Models/BaseCrudModel.php(48): CodeIgniter\Model->__call('query', Array)
+#5 /var/www/html/src/app/Models/UserManagementModels.php(37): App\Models\BaseCrudModel->getColumnsFromTable('user_management', 'id', 'column', 'value_type', 'value_key')
+#6 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(49): App\Models\UserManagementModels->getColumnsFromTable()
+#7 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(87): App\Controllers\AccountManagement\DbController->dbFields(Array)
+#8 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate(Array)
+#9 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', Array)
+#10 /var/www/html/src/system/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+#11 /var/www/html/src/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+#12 /var/www/html/src/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#13 /var/www/html/src/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#14 /var/www/html/src/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#15 /var/www/html/src/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#16 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: mysqli::real_connect(): Argument #5 ($port) must be of type ?int, string given in /var/www/html/src/system/Database/MySQLi/Connection.php:246
+Stack trace:
+#0 /var/www/html/src/system/Database/BaseConnection.php(421): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 /var/www/html/src/system/Database/BaseConnection.php(620): CodeIgniter\Database\BaseConnection->initialize()
+#2 /var/www/html/src/system/Model.php(924): CodeIgniter\Database\BaseConnection->query('SELECT COLUMN_N...')
+#3 /var/www/html/src/app/Models/BaseCrudModel.php(48): CodeIgniter\Model->__call('query', Array)
+#4 /var/www/html/src/app/Models/UserManagementModels.php(37): App\Models\BaseCrudModel->getColumnsFromTable('user_management', 'id', 'column', 'value_type', 'value_key')
+#5 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(49): App\Models\UserManagementModels->getColumnsFromTable()
+#6 /var/www/html/src/app/Controllers/AccountManagement/DbController.php(87): App\Controllers\AccountManagement\DbController->dbFields(Array)
+#7 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate(Array)
+#8 /var/www/html/src/app/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', Array)
+#9 /var/www/html/src/system/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+#10 /var/www/html/src/system/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+#11 /var/www/html/src/system/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#12 /var/www/html/src/system/Boot.php(334): CodeIgniter\CodeIgniter->run()
+#13 /var/www/html/src/system/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#14 /var/www/html/src/public/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#15 {main}
+CRITICAL - 2025-07-23 00:40:53 --> Error: Class "App\Controllers\SystemMessageController" not found
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Models/BaseCrudModel.php on line 72.
+ 1 APPPATH/Models/UserManagementModels.php(43): App\Models\BaseCrudModel->dbCreate('user_management', 'id', [...])
+ 2 APPPATH/Controllers/AccountManagement/DbController.php(89): App\Models\UserManagementModels->dbCreate([...])
+ 3 APPPATH/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate([...])
+ 4 APPPATH/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', [...])
+ 5 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+ 6 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+ 7 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-23 00:42:01 --> Error: Class "App\Controllers\MessageController" not found
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Models/BaseCrudModel.php on line 72.
+ 1 APPPATH/Models/UserManagementModels.php(43): App\Models\BaseCrudModel->dbCreate('user_management', 'id', [...])
+ 2 APPPATH/Controllers/AccountManagement/DbController.php(89): App\Models\UserManagementModels->dbCreate([...])
+ 3 APPPATH/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate([...])
+ 4 APPPATH/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', [...])
+ 5 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+ 6 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+ 7 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-23 00:44:16 --> Error: Class "App\Controllers\MessageController" not found
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Models/BaseCrudModel.php on line 72.
+ 1 APPPATH/Models/UserManagementModels.php(43): App\Models\BaseCrudModel->dbCreate('user_management', 'id', [...])
+ 2 APPPATH/Controllers/AccountManagement/DbController.php(89): App\Models\UserManagementModels->dbCreate([...])
+ 3 APPPATH/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate([...])
+ 4 APPPATH/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', [...])
+ 5 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+ 6 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+ 7 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-23 00:49:38 --> Error: Class "App\Controllers\MessageController" not found
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Models/BaseCrudModel.php on line 72.
+ 1 APPPATH/Models/UserManagementModels.php(43): App\Models\BaseCrudModel->dbCreate('user_management', 'id', [...])
+ 2 APPPATH/Controllers/AccountManagement/DbController.php(89): App\Models\UserManagementModels->dbCreate([...])
+ 3 APPPATH/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate([...])
+ 4 APPPATH/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', [...])
+ 5 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+ 6 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+ 7 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2025-07-23 00:51:03 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-23 00:52:26 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-23 00:53:21 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-23 00:54:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2025-07-23 01:26:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

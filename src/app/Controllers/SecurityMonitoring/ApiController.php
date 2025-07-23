@@ -6,7 +6,7 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 # 
 // use App\Controllers\Pattern\TokenCsrfController;
-// use App\Controllers\Pattern\SystemMessageController;
+// use App\Controllers\Pattern\MessageController;
 // use App\Controllers\Pattern\ObjetoDbController;
 // use App\Controllers\Pattern\SystemUploadDbController;
 # 
@@ -26,7 +26,7 @@ class ApiController extends ResourceController
         $this->uri = new \CodeIgniter\HTTP\URI(current_url());
         // $this->DbController = new ObjetoDbController();
         // $this->tokenCsrf = new TokenCsrfController();
-        // $this->message = new SystemMessageController();
+        // $this->message = new MessageController();
         #
     }
 

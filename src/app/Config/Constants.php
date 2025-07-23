@@ -20,7 +20,7 @@ $varHP2 = florinda('aGFiaWxpZGEwN19hZGQ0');
 $varHP3 = florinda('TWk1dEVyaTA=');
 $varHP4 = florinda('aGFiaWxpZGFkZTA3');
 $varHP5 = florinda('TXlTUUxp');
-$varHP6 = florinda('MzMwNg==');
+$varHP6 = (int) florinda('MzMwNg==');
 #
 /*
  | --------------------------------------------------------------------------
@@ -54,7 +54,16 @@ defined('A7F461AE0A8E56B9094A059E41E63A29') || define('A7F461AE0A8E56B9094A059E4
 defined('DF89A629E5CC0CD3A9557D3E32210B22') || define('DF89A629E5CC0CD3A9557D3E32210B22', $varHP3);
 defined('E7569C11BEC9F4BC0D9FA34F3D8DC2D3') || define('E7569C11BEC9F4BC0D9FA34F3D8DC2D3', $varHP4);
 defined('F9695D50A500B963BBC4EC820FA7C281') || define('F9695D50A500B963BBC4EC820FA7C281', $varHP5);
-defined('FFBAFDC68F8D1656EDA8743CC3F589CE') || define('FFBAFDC68F8D1656EDA8743CC3F589CE', $varHP5);
+defined('FFBAFDC68F8D1656EDA8743CC3F589CE') || define('FFBAFDC68F8D1656EDA8743CC3F589CE', $varHP6);
+#
+// echo "<br>".E98071774F062CEDADB040192204E6BF;
+// echo "<br>".A7F461AE0A8E56B9094A059E41E63A29;
+// echo "<br>".DF89A629E5CC0CD3A9557D3E32210B22;
+// echo "<br>".E7569C11BEC9F4BC0D9FA34F3D8DC2D3;
+// echo "<br>".F9695D50A500B963BBC4EC820FA7C281;
+// echo "<br>".FFBAFDC68F8D1656EDA8743CC3F589CE;
+// echo "<br>";
+// exit(0);
 /*
  | --------------------------------------------------------------------------
  | Exit Status Codes

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Database\Query;
 use CodeIgniter\Model;
-use App\Controllers\SystemMessageController;
+use App\Controllers\Pattern\MessageController;
 
 class BaseCrudModel extends Model
 {
@@ -69,7 +69,7 @@ class BaseCrudModel extends Model
 
     public function dbCreate($dbTable, $primaryKey, $dbCreate)
     {
-        $this->message = new SystemMessageController();
+        $this->message = new MessageController();
         $this->table = $dbTable;
         $this->primaryKey = $primaryKey;
         $this->allowedFields = array_keys($dbCreate);
@@ -98,7 +98,7 @@ class BaseCrudModel extends Model
         // myPrint('$keyVariable :: ', $keyVariable, true);
         // myPrint('$keyVariable :  ', $keyVariable, true);
         // myPrint('$keyValue :: ', $keyValue, true);
-        $this->message = new SystemMessageController();
+        $this->message = new MessageController();
         // $getColumnsFromTable = array();
         $this->table = $dbTable;
         $this->primaryKey = $primaryKey;
@@ -131,7 +131,7 @@ class BaseCrudModel extends Model
         // myPrint($key, $dbUpdate);
         $this->table = $dbTable;
         $this->primaryKey = $primaryKey;
-        $this->message = new SystemMessageController();
+        $this->message = new MessageController();
         try {
             if (
                 isset($dbUpdate)
@@ -169,7 +169,7 @@ class BaseCrudModel extends Model
 
     public function dBdelete($dbTable, $primaryKey, $parameter, $key = NULL)
     {
-        $this->message = new SystemMessageController();
+        $this->message = new MessageController();
         $this->table = $dbTable;
         $this->primaryKey = $primaryKey;
         try {

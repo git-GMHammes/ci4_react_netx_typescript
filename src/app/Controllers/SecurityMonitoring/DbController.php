@@ -3,7 +3,7 @@
 namespace App\Controllers\SecurityMonitoring;
 
 use App\Controllers\Pattern\SystemBaseController;
-use App\Controllers\Pattern\SystemMessageController;
+use App\Controllers\Pattern\MessageController;
 use App\Controllers\BaseController;
 # use App\Models\UploadModel;
 # use App\Models\TabelaPrincipalModels;
@@ -26,7 +26,7 @@ class DbController extends BaseController
         // $this->ModelVTabelaPrincipal = new VTabelaPrincipalModelsModels();
         $this->uri = new \CodeIgniter\HTTP\URI(current_url());
         $this->pagination = new SystemBaseController();
-        $this->message = new SystemMessageController();
+        $this->message = new MessageController();
     }
 
     # route POST /www/index.php/project/method

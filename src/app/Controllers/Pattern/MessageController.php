@@ -22,9 +22,9 @@ class MessageController extends Controller
         exit('403 Forbidden - Directory access is forbidden.');
     }
 
-    # use App\Controllers\SystemMessageController;
+    # use App\Controllers\MessageController;
     # private $message;
-    # $this->message = new SystemMessageController();
+    # $this->message = new MessageController();
     # $this->message->message($message = array(), $typeMessage, $dataValue = array(), $tempData = 5);
     # 'success', 'warning', 'danger'
     public function message($message = array(), $typeMessage = '', $dataValue = array(), $tempData = 5)

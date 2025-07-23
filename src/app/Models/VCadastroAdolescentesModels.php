@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Database\Query;
 use CodeIgniter\Model;
-use App\Controllers\SystemMessageController;
+use App\Controllers\MessageController;
 
 class VCadastroAdolescentesModels extends Model
 {

@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Pattern;
 
-use App\Controllers\SystemMessageController;
+use App\Controllers\MessageController;
 use CodeIgniter\Controller;
 use Exception;
 
@@ -12,7 +12,7 @@ class MailController extends Controller
     private $uri;
     public function __construct()
     {
-        $this->message = new SystemMessageController();
+        $this->message = new MessageController();
         $this->uri = new \CodeIgniter\HTTP\URI(current_url());
     }
     #

@@ -6,7 +6,7 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\API\ResponseTrait;
 # 
 // use App\Controllers\TokenCsrfController;
-// use App\Controllers\SystemMessageController;
+// use App\Controllers\MessageController;
 // use App\Controllers\ObjetoDbController;
 // use App\Controllers\SystemUploadDbController;
 # 
@@ -26,7 +26,7 @@ class CalendarController extends ResourceController
         $this->uri = new \CodeIgniter\HTTP\URI(current_url());
         // $this->DbController = new ObjetoDbController();
         // $this->tokenCsrf = new TokenCsrfController();
-        // $this->message = new SystemMessageController();
+        // $this->message = new MessageController();
     }
     #
     # route POST /www/sigla/rota

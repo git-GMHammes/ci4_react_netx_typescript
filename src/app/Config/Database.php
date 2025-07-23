@@ -74,6 +74,7 @@ class Database extends Config
         'strictOn' => false,
         'failover' => [],
         'port' => FFBAFDC68F8D1656EDA8743CC3F589CE,
+        // 'port' => 3306,
         'numberNative' => false,
         'foundRows' => false,
         'dateFormat' => [

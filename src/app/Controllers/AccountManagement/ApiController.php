@@ -76,7 +76,7 @@ class ApiController extends ResourceController
     {
         $processRequestSuccess = false;
         $server = $_SERVER['SERVER_NAME'];
-        myPrint('$processRequest :: ', $processRequest, true);
+        // myPrint('$processRequest :: ', $processRequest, true);
         if (
             $server === '127.0.0.1'
             || $server === 'localhost'
@@ -120,6 +120,13 @@ class ApiController extends ResourceController
         return $dbSave;
     }
 
+    private function returnRash($hashDatabase, $inputPassword)
+    {
+        if (!$hashDatabase)
+            return false;
+        return password_verify($inputPassword, $hashDatabase);
+    }
+
     # route POST /www/index.php/habilidade/usuario/api/salvar/(:any)
     # route GET /www/index.php/habilidade/usuario/api/salvar/(:any)
     # Informação sobre o controller
@@ -134,6 +141,8 @@ class ApiController extends ResourceController
         // $processRequest['assinatura'] = $this->assinatura($processRequest);
         // myPrint($processRequest, 'C:\Users\Habilidade.Com\AppData\Roaming\Code\User\snippets\php.json');
         #
+        myPrint(' TESTE :: ', $this->returnRash($processRequest['senha'], '$2y$10$9eA3lPZ1c3TxNO30Ko5wuebuzW/Z/i9Vnp7QBc.t70dUs5r2RxDkG'));
+        exit();
         if ($getMethod == 'GET') {
             return $this->response->setStatusCode(200)->setJSON(['status' => 'invalid', 'message' => 'A requisição foi processada com sucesso, mas não há conteúdo para retornar no corpo da resposta.', 'date' => date('Y-m-d'), 'api' => ['version' => '1.0', 'method' => $getMethod, 'description' => 'API Description', 'content_type' => 'application/x-www-form-urlencoded'], 'result' => ['data' => 'void'], 'metadata' => ['page_title' => 'Application title', 'getURI' => ['index.php', 'fph', 'usuario', 'api', 'atualizar']]]);
         }
@@ -141,11 +150,13 @@ class ApiController extends ResourceController
         $token_csrf = (isset($processRequest['token_csrf']) ? $processRequest['token_csrf'] : 'erro');
         $json = isset($processRequest['json']) && $processRequest['json'] == 1 ? 1 : 0;
         $choice_update = (isset($processRequest['id']) && !empty($processRequest['id'])) ? (true) : (false);
+        $senha = $processRequest['senha'];
+        $hashSeguro = password_hash($senha, PASSWORD_DEFAULT);
+        $processRequest['senha'] = $hashSeguro;
         #
         try {
             #
             $dbSave = $this->saveRequest($choice_update, $token_csrf, $processRequest);
-            exit('147');
             $apiRespond = $this->setApiRespond($dbSave['status'], $getMethod, $dbSave['dbResponse']);
             $response = $this->response->setStatusCode(201)->setJSON(body: $apiRespond);
         } catch (\Exception $e) {

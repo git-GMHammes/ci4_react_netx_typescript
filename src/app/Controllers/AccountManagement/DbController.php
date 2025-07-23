@@ -5,15 +5,15 @@ namespace App\Controllers\AccountManagement;
 use App\Controllers\Pattern\SystemBaseController;
 use App\Controllers\Pattern\MessageController;
 use App\Controllers\BaseController;
+use App\Models\UserManagementModels;
 # use App\Models\UploadModel;
-# use App\Models\TabelaPrincipalModels;
 # use App\Models\VTabelaPrincipalModelsModels;
 use Exception;
 
 class DbController extends BaseController
 {
     // private $ModelUpload;
-    private $ModelTabelaPrincipal;
+    private $ModelUserManagement;
     private $ModelVTabelaPrincipal;
     private $message;
     private $uri;
@@ -21,10 +21,10 @@ class DbController extends BaseController
 
     public function __construct()
     {
-        // $this->ModelUpload = new UploadModel();
-        // $this->ModelTabelaPrincipal = new TabelaPrincipalModels();
-        // $this->ModelVTabelaPrincipal = new VTabelaPrincipalModelsModels();
         $this->uri = new \CodeIgniter\HTTP\URI(current_url());
+        $this->ModelUserManagement = new UserManagementModels();
+        // $this->ModelUpload = new UploadModel();
+        // $this->ModelVTabelaPrincipal = new VTabelaPrincipalModelsModels();
         $this->pagination = new SystemBaseController();
         $this->message = new MessageController();
     }
@@ -44,17 +44,17 @@ class DbController extends BaseController
     # $this->DbController->dbFields($fileds = array();
     public function dbFields($processRequestFields = array())
     {
-        myPrint($processRequestFields, 'src\app\Controllers\SystemUploadDbController.php', true);
+        // myPrint($processRequestFields, 'src\app\Controllers\SystemUploadDbController.php', true);
         $dbCreate = array();
-        $autoColumn = $this->ModelTabelaPrincipal->getColumnsFromTable();
-        myPrint($autoColumn, '', true);
+        $autoColumn = $this->ModelUserManagement->getColumnsFromTable();
+        // myPrint($autoColumn, '', true);
         if (isset($autoColumn['COLUMN'])) {
             foreach ($autoColumn['COLUMN'] as $key_autoColumn => $value_autoColumn) {
                 (isset($processRequestFields[$value_autoColumn])) ? ($dbCreate[$value_autoColumn] = $processRequestFields[$value_autoColumn]) : (NULL);
             }
         }
         (isset($processRequestFields['modelo'])) ? ($dbCreate['modelo'] = $processRequestFields['modelo']) : (NULL);
-        myPrint($dbCreate, 'src\app\Controllers\ExempleDbController.php');
+        // myPrint($dbCreate, 'src\app\Controllers\ExempleDbController.php');
         return ($dbCreate);
     }
 
@@ -86,10 +86,10 @@ class DbController extends BaseController
     {
         $parameter = $this->dbFields($parameter);
         try {
-            $this->ModelTabelaPrincipal->dbCreate($this->dbFields($parameter));
-            $affectedRows = $this->ModelTabelaPrincipal->affectedRows();
+            $this->ModelUserManagement->dbCreate($this->dbFields($parameter));
+            $affectedRows = $this->ModelUserManagement->affectedRows();
             if ($affectedRows > 0) {
-                $dbCreate['insertID'] = $this->ModelTabelaPrincipal->insertID();
+                $dbCreate['insertID'] = $this->ModelUserManagement->insertID();
                 $dbCreate['affectedRows'] = $affectedRows;
                 $dbCreate['dbCreate'] = $parameter;
             } else {
@@ -119,7 +119,7 @@ class DbController extends BaseController
         try {
             if ($parameter !== NULL) {
                 $dbResponse = $this
-                    ->ModelTabelaPrincipal
+                    ->ModelUserManagement
                     ->where('id', $parameter)
                     ->where('deleted_at', NULL)
                     ->orderBy('updated_at', 'asc')
@@ -128,7 +128,7 @@ class DbController extends BaseController
                 //
             } else {
                 $dbResponse = $this
-                    ->ModelTabelaPrincipal
+                    ->ModelUserManagement
                     ->where('deleted_at', NULL)
                     ->orderBy('updated_at', 'asc')
                     ->dBread()
@@ -215,12 +215,12 @@ class DbController extends BaseController
             && empty($parameter['deleted_at'])
             && count($parameter) == 1
         ) {
-            $this->ModelTabelaPrincipal->dbUpdate($key, $parameter);
+            $this->ModelUserManagement->dbUpdate($key, $parameter);
         } else {
-            $this->ModelTabelaPrincipal->dbUpdate($key, $this->dbFields($parameter));
+            $this->ModelUserManagement->dbUpdate($key, $this->dbFields($parameter));
         }
         try {
-            $affectedRows = $this->ModelTabelaPrincipal->affectedRows();
+            $affectedRows = $this->ModelUserManagement->affectedRows();
             if ($affectedRows > 0) {
                 $dbUpdate['updateID'] = $key;
                 $dbUpdate['affectedRows'] = $affectedRows;
@@ -249,8 +249,8 @@ class DbController extends BaseController
     public function dbDelete($parameter = NULL)
     {
         try {
-            $this->ModelTabelaPrincipal->dbDelete('id', $parameter);
-            $affectedRows = $this->ModelTabelaPrincipal->affectedRows();
+            $this->ModelUserManagement->dbDelete('id', $parameter);
+            $affectedRows = $this->ModelUserManagement->affectedRows();
             if ($affectedRows > 0) {
                 $dbUpdate['updateID'] = $parameter;
                 $dbUpdate['affectedRows'] = $affectedRows;
@@ -281,7 +281,7 @@ class DbController extends BaseController
             // exit('src\app\Controllers\AdolescenteDbController.php');
             if ($parameter !== NULL) {
                 $dbResponse = $this
-                    ->ModelTabelaPrincipal
+                    ->ModelUserManagement
                     ->where('id', $parameter)
                     ->where('deleted_at !=', NULL)
                     ->orderBy('id', 'DESC')
@@ -290,7 +290,7 @@ class DbController extends BaseController
                 //
             } else {
                 $dbResponse = $this
-                    ->ModelTabelaPrincipal
+                    ->ModelUserManagement
                     ->where('deleted_at !=', NULL)
                     ->orderBy('id', 'DESC')
                     ->dBread()
