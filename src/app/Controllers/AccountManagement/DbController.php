@@ -84,8 +84,8 @@ class DbController extends BaseController
     # $this->DbController->dbCreate($parameter);
     public function dbCreate($parameter = NULL)
     {
+        $parameter = $this->dbFields($parameter);
         try {
-            // myPrint('$parameter :: ', $parameter);
             $this->ModelTabelaPrincipal->dbCreate($this->dbFields($parameter));
             $affectedRows = $this->ModelTabelaPrincipal->affectedRows();
             if ($affectedRows > 0) {
@@ -116,7 +116,6 @@ class DbController extends BaseController
     # retorno do controller [JSON]
     public function dbRead($parameter = NULL, $page = 1, $limit = 10)
     {
-
         try {
             if ($parameter !== NULL) {
                 $dbResponse = $this

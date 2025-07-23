@@ -83,9 +83,9 @@ defined('FFBAFDC68F8D1656EDA8743CC3F589CE') || define('FFBAFDC68F8D1656EDA8743CC
 $servername = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
 // exit($servername);
 if ($servername === 'habilidade.com') {
-    defined('DB_CONECT') || define('DB_CONECT', 'Habilidade7');
+    defined('DB_CONNECTION') || define('DB_CONNECTION', 'Habilidade7');
 } elseif ($servername === 'localhost' || $servername === '127.0.0.1:56000') {
-    defined('DB_CONECT') || define('DB_CONECT', 'Habilidade7');
+    defined('DB_CONNECTION') || define('DB_CONNECTION', 'Habilidade7');
 }
 #
 if ($servername === 'habilidade.com') {

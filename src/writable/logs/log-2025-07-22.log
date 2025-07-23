@@ -59,3 +59,15 @@ in APPPATH/Controllers/AccountManagement/ApiController.php on line 101.
  5 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
  6 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
  7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2025-07-22 02:07:55 --> Error: Call to a member function getColumnsFromTable() on null
+[Method: POST, Route: habilidade/usuario/api/salvar]
+in APPPATH/Controllers/AccountManagement/DbController.php on line 49.
+ 1 APPPATH/Controllers/AccountManagement/DbController.php(87): App\Controllers\AccountManagement\DbController->dbFields([...])
+ 2 APPPATH/Controllers/AccountManagement/ApiController.php(101): App\Controllers\AccountManagement\DbController->dbCreate([...])
+ 3 APPPATH/Controllers/AccountManagement/ApiController.php(147): App\Controllers\AccountManagement\ApiController->saveRequest(false, 'erro', [...])
+ 4 SYSTEMPATH/CodeIgniter.php(933): App\Controllers\AccountManagement\ApiController->create_update()
+ 5 SYSTEMPATH/CodeIgniter.php(507): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AccountManagement\ApiController))
+ 6 SYSTEMPATH/CodeIgniter.php(354): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH/Boot.php(334): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH/Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
