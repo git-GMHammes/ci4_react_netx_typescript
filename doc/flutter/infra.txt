@@ -30,6 +30,13 @@ cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
 cd modelo_v2
 flutter run
 clear
+
+
+# Adiciona dependências
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\
+cd modelo_v2
+flutter pub get
  
 # Execute primeiro este comando no PowerShell
 clear
@@ -53,6 +60,8 @@ flutter pub add audioplayers
 flutter pub add video_player
 flutter pub add go_router
 flutter clean
+
+==Adiciona 
 flutter pub get
 
 ======================================
@@ -98,8 +107,10 @@ flutter run -d emulator-5554
 # Necessário realizar alterações no src\public\flutter\modelo_v2\pubspec.yaml
 # Adicionar icone : src\public\flutter\modelo_v2\assets\images\icons\app_icon.png
 clear
-cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2
-flutter pub get
+cd C:\laragon\w
+ww\ci4_react_netx_typescript\src\public\flutter\modelo_v2
+
+fAdiciona 
 flutter pub run flutter_launcher_icons:main
 
 ======================================
@@ -108,7 +119,9 @@ flutter pub run flutter_launcher_icons:main
 clear
 cd C:\laragon\www\ci4_react_netx_typescript\src\public\flutter\modelo_v2
 flutter pub upgrade --major-versions
-Get-Content "android\gradle.properties"
+Get-Content "an
+droid\gradle.properties"
+flAdiciona 
 flutter pub get
 flutter clean
 flutter pub outdated

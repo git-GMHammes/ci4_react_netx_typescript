@@ -89,6 +89,8 @@ defined('FFBAFDC68F8D1656EDA8743CC3F589CE') || define('FFBAFDC68F8D1656EDA8743CC
  |       http://tldp.org/LDP/abs/html/exitcodes.html
  |
  */
+
+#
 $servername = (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost');
 // exit($servername);
 if ($servername === 'habilidade.com') {

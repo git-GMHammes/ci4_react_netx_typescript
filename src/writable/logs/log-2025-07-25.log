@@ -1,0 +1,2 @@
+INFO - 2025-07-25 00:27:32 --> REDIRECTED ROUTE at http://127.0.0.1:56000/src/public/home
+DEBUG - 2025-07-25 00:34:09 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

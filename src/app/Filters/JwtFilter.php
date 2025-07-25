@@ -51,7 +51,6 @@ class JwtFilter implements FilterInterface
 
         $token = $arr[1];
         // myPrint($token, 'src\app\Filters\EprocMniJwtFilter.php');
-
         if ($token) {
             try {
                 $decoded = \Firebase\JWT\JWT::decode($token, $keys['key1']);
