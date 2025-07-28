@@ -11,3 +11,5 @@ src/public/flutter/modelo_v2/linux/*
 src/public/flutter/modelo_v2/macos/*
 src/public/flutter/modelo_v2/web/*
 src/public/flutter/modelo_v2/windows/*
+src/writable/debugbar/debugbar_*
+src/writable/logs/log*
