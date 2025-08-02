@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // Para CPF:
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+// Para o envio de API
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+// Para redirecionamento
+import 'package:go_router/go_router.dart';
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
@@ -14,11 +19,14 @@ class FormPage extends StatefulWidget {
 
 class _FormPageState extends State<FormPage> {
   final _formKey = GlobalKey<FormState>();
+
+  // CAMPOS DO FORMULÁRIO
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
   final _cpfMaskFormatter = MaskTextInputFormatter(
     mask: '###.###.###-##',
     filter: {"#": RegExp(r'[0-9]')},
+    type: MaskAutoCompletionType.lazy,
   );
   final _emailController = TextEditingController();
   final _whatsappController = TextEditingController();
@@ -27,6 +35,12 @@ class _FormPageState extends State<FormPage> {
   final _dataNascimentoController = TextEditingController();
   final _cepController = TextEditingController();
   final _enderecoController = TextEditingController();
+
+  // DADOS DA API
+  final String apiUrl =
+      'https://habilidade.com/ci4_react_netx_typescript/src/public/index.php/habilidade/usuario/api/salvar';
+  final String token =
+      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2hhYmlsaWRhZGUuY29tL2NpNF9yZWFjdF9uZXR4X3R5cGVzY3JpcHQvc3JjL3B1YmxpYy8iLCJhdWQiOiJodHRwczovL2hhYmlsaWRhZGUuY29tL2NpNF9yZWFjdF9uZXR4X3R5cGVzY3JpcHQvc3JjL3B1YmxpYy8iLCJpYXQiOjE3NTMxNDM1NzAsImV4cCI6MTkwODY2MzU3MCwiZGF0YSI6eyJ1c2VySWQiOiJmaWFwdHBhIiwiZW1haWwiOiJnZnNAcHJvZGVyai5yai5nb3YuYnIifX0.1tklAyGQPSWF5sEs86pBKXbAguOJAlFyPZ8fP53pqlI';
 
   @override
   void dispose() {
@@ -39,8 +53,99 @@ class _FormPageState extends State<FormPage> {
     _dataNascimentoController.dispose();
     _cepController.dispose();
     _enderecoController.dispose();
-    // NÃO coloque _cpfMaskFormatter.dispose();
     super.dispose();
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState?.validate() != true) return;
+
+    Map<String, dynamic> data = {
+      "nome": _nomeController.text.trim(),
+      "cpf": _cpfController.text.trim(),
+      "email": _emailController.text.trim(),
+      "whatsapp": _whatsappController.text.trim(),
+      "senha": _senhaController.text.trim(),
+      "telefone": _telefoneController.text.trim(),
+      "data_nascimento": _dataNascimentoController.text.trim(),
+      "cep": _cepController.text.trim(),
+      "endereco": _enderecoController.text.trim(),
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json', 'Authorization': token},
+        body: jsonEncode(data),
+      );
+      // ignore: avoid_print
+      print('Status code: ${response.statusCode}');
+      // ignore: avoid_print
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final decoded = jsonDecode(response.body);
+        if (decoded['status'] == 'success') {
+          // Dados retornados
+          final insertID = decoded['result']?['insertID'];
+          final nomeSalvo = decoded['result']?['dbCreate']?['nome'];
+          final mensagem = decoded['message'];
+          final data = decoded['date'];
+          final apiVersion = decoded['api']?['version'];
+
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Sucesso!\n'
+                '$mensagem\n'
+                'ID: $insertID\n'
+                'Nome: $nomeSalvo\n'
+                'Data: $data\n'
+                'Versão API: $apiVersion',
+              ),
+              duration: Duration(seconds: 3),
+            ),
+          );
+          // Limpa os campos
+          _nomeController.clear();
+          _cpfController.clear();
+          _emailController.clear();
+          _whatsappController.clear();
+          _senhaController.clear();
+          _telefoneController.clear();
+          _dataNascimentoController.clear();
+          _cepController.clear();
+          _enderecoController.clear();
+
+          // Aguarde a SnackBar sumir antes de redirecionar
+          await Future.delayed(const Duration(seconds: 3));
+          if (mounted) {
+            context.go('/'); // Redireciona para login!
+          }
+        } else {
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Falha no cadastro: ${decoded['message'] ?? 'Erro desconhecido.'}',
+              ),
+            ),
+          );
+        }
+      } else {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erro ao enviar dados: ${response.reasonPhrase}'),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(
+        // ignore: use_build_context_synchronously
+        context,
+      ).showSnackBar(SnackBar(content: Text('Erro: $e')));
+    }
   }
 
   Widget buildNomeField() {
@@ -234,7 +339,7 @@ class _FormPageState extends State<FormPage> {
 
   Widget buildTelefoneField() {
     final telefoneMaskFormatter = MaskTextInputFormatter(
-      mask: '(##) ####-####',
+      mask: '(##) #####-####', // Aceita fixo e celular!
       filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy,
     );
@@ -244,10 +349,10 @@ class _FormPageState extends State<FormPage> {
       decoration: const InputDecoration(
         labelText: 'Telefone',
         border: OutlineInputBorder(),
-        hintText: '(99) 99999-9999',
+        hintText: '(99) 99999-9999 ou (99) 9999-9999',
       ),
       keyboardType: TextInputType.phone,
-      maxLength: 15, // (99) 99999-9999
+      maxLength: 15,
       inputFormatters: [
         telefoneMaskFormatter,
         FilteringTextInputFormatter.allow(RegExp(r'[0-9()\s-]')),
@@ -258,22 +363,13 @@ class _FormPageState extends State<FormPage> {
         required bool isFocused,
         required int? maxLength,
       }) {
-        // Mensagem de erro dinâmica
         String? error;
         String unmasked = telefoneMaskFormatter.getUnmaskedText();
-
         if (_telefoneController.text.isEmpty) {
           error = 'Por favor, insira seu Telefone';
-        } else if (unmasked.length < 11) {
+        } else if (unmasked.length != 10 && unmasked.length != 11) {
           error = 'Digite todos os números do Telefone';
-        } else if (!RegExp(
-          r'^[0-9()\s-]+$',
-        ).hasMatch(_telefoneController.text)) {
-          error = 'Apenas números e símbolos (), - são permitidos';
-        } else {
-          error = null;
         }
-
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -294,11 +390,8 @@ class _FormPageState extends State<FormPage> {
         if (value == null || value.isEmpty) {
           return 'Por favor, insira seu Telefone';
         }
-        if (unmasked.length < 11) {
+        if (unmasked.length != 10 && unmasked.length != 11) {
           return 'Digite todos os números do Telefone';
-        }
-        if (!RegExp(r'^[0-9()\s-]+$').hasMatch(value)) {
-          return 'Apenas números e símbolos (), - são permitidos';
         }
         return null;
       },
@@ -806,17 +899,6 @@ class _FormPageState extends State<FormPage> {
         ),
       ),
     );
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Processar os dados - em um app real você enviaria para uma API ou banco de dados
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Formulário enviado com sucesso!')),
-      );
-
-      // Aqui você pode adicionar código para salvar os dados ou navegar para outra página
-    }
   }
 
   @override
