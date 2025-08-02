@@ -23,11 +23,6 @@ class _FormPageState extends State<FormPage> {
   // CAMPOS DO FORMULÁRIO
   final _nomeController = TextEditingController();
   final _cpfController = TextEditingController();
-  final _cpfMaskFormatter = MaskTextInputFormatter(
-    mask: '###.###.###-##',
-    filter: {"#": RegExp(r'[0-9]')},
-    type: MaskAutoCompletionType.lazy,
-  );
   final _emailController = TextEditingController();
   final _whatsappController = TextEditingController();
   final _senhaController = TextEditingController();
@@ -159,9 +154,40 @@ class _FormPageState extends State<FormPage> {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r"[A-Za-zÀ-ú\s]")),
       ],
+      buildCounter: (
+        BuildContext context, {
+        required int currentLength,
+        required bool isFocused,
+        required int? maxLength,
+      }) {
+        String? error;
+        String value = _nomeController.text;
+
+        if (value.isEmpty || value.length < 4) {
+          error = 'Por favor, insira seu Nome';
+        } else if (!RegExp(r"^[A-Za-zÀ-ú\s]+$").hasMatch(value)) {
+          error = 'Apenas letras são permitidas';
+        } else if (value.length > 150) {
+          error = 'O nome deve ter no máximo 150 caracteres';
+        } else {
+          error = null;
+        }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (error != null)
+              Text(
+                error,
+                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+              ),
+            Text('$currentLength/150', style: const TextStyle(fontSize: 12)),
+          ],
+        );
+      },
       validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira seu nome';
+        if (value == null || value.isEmpty || value.length < 4) {
+          return 'Por favor, insira seu Nome';
         }
         if (!RegExp(r"^[A-Za-zÀ-ú\s]+$").hasMatch(value)) {
           return 'Apenas letras são permitidas';
@@ -175,26 +201,66 @@ class _FormPageState extends State<FormPage> {
   }
 
   Widget buildCpfField() {
+    final cpfMaskFormatter = MaskTextInputFormatter(
+      mask: '###.###.###-##',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy,
+    );
+
     return TextFormField(
       controller: _cpfController,
       decoration: const InputDecoration(
         labelText: 'CPF',
         border: OutlineInputBorder(),
         hintText: '000.000.000-00',
-        // NÃO coloque counterText: ''
       ),
       keyboardType: TextInputType.number,
       maxLength: 14, // 000.000.000-00
-      inputFormatters: [_cpfMaskFormatter],
+      inputFormatters: [cpfMaskFormatter],
+      buildCounter: (
+        BuildContext context, {
+        required int currentLength,
+        required bool isFocused,
+        required int? maxLength,
+      }) {
+        String? error;
+        String onlyNumbers = cpfMaskFormatter.getUnmaskedText();
+        String maskedText = _cpfController.text;
+
+        if (maskedText.isEmpty) {
+          error = 'Por favor, insira seu CPF';
+        } else if (onlyNumbers.length != 11) {
+          error = 'Digite todos os números do CPF';
+        } else if (!cpfMaskFormatter.isFill()) {
+          error = 'Preencha o CPF completo';
+        } else {
+          error = null;
+        }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (error != null)
+              Text(
+                error,
+                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 161, 159, 159)),
+              ),
+            Text(
+              '$currentLength/14 caracteres',
+              style: const TextStyle(fontSize: 12),
+            ),
+          ],
+        );
+      },
       validator: (value) {
+        String onlyNumbers = cpfMaskFormatter.getUnmaskedText();
         if (value == null || value.isEmpty) {
           return 'Por favor, insira seu CPF';
         }
-        String onlyNumbers = _cpfMaskFormatter.getUnmaskedText();
         if (onlyNumbers.length != 11) {
-          return 'CPF deve ter 11 dígitos';
+          return 'Digite todos os números do CPF';
         }
-        if (!_cpfMaskFormatter.isFill()) {
+        if (!cpfMaskFormatter.isFill()) {
           return 'Preencha o CPF completo';
         }
         return null;
@@ -312,7 +378,7 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Colors.red),
+                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
               ),
             Text(
               '$currentLength/15 caracteres',
@@ -338,62 +404,76 @@ class _FormPageState extends State<FormPage> {
   }
 
   Widget buildTelefoneField() {
+    // Inicialmente, máscara de celular
     final telefoneMaskFormatter = MaskTextInputFormatter(
-      mask: '(##) #####-####', // Aceita fixo e celular!
+      mask: '(##) #####-####',
       filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy,
     );
 
-    return TextFormField(
-      controller: _telefoneController,
-      decoration: const InputDecoration(
-        labelText: 'Telefone',
-        border: OutlineInputBorder(),
-        hintText: '(99) 99999-9999 ou (99) 9999-9999',
-      ),
-      keyboardType: TextInputType.phone,
-      maxLength: 15,
-      inputFormatters: [
-        telefoneMaskFormatter,
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9()\s-]')),
-      ],
-      buildCounter: (
-        BuildContext context, {
-        required int currentLength,
-        required bool isFocused,
-        required int? maxLength,
-      }) {
-        String? error;
-        String unmasked = telefoneMaskFormatter.getUnmaskedText();
-        if (_telefoneController.text.isEmpty) {
-          error = 'Por favor, insira seu Telefone';
-        } else if (unmasked.length != 10 && unmasked.length != 11) {
-          error = 'Digite todos os números do Telefone';
-        }
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (error != null)
-              Text(
-                error,
-                style: const TextStyle(fontSize: 12, color: Colors.red),
-              ),
-            Text(
-              '$currentLength/15 caracteres',
-              style: const TextStyle(fontSize: 12),
-            ),
-          ],
+    return StatefulBuilder(
+      builder: (context, setState) {
+        return TextFormField(
+          controller: _telefoneController,
+          decoration: const InputDecoration(
+            labelText: 'Telefone',
+            border: OutlineInputBorder(),
+            hintText: '(99) 99999-9999 ou (99) 9999-9999',
+          ),
+          keyboardType: TextInputType.phone,
+          maxLength: 15,
+          inputFormatters: [telefoneMaskFormatter],
+          onChanged: (value) {
+            String numbers = telefoneMaskFormatter.getUnmaskedText();
+            if (numbers.length > 10 &&
+                telefoneMaskFormatter.getMask() != '(##) #####-####') {
+              telefoneMaskFormatter.updateMask(mask: '(##) #####-####');
+              setState(() {});
+            } else if (numbers.length <= 10 &&
+                telefoneMaskFormatter.getMask() != '(##) ####-####') {
+              telefoneMaskFormatter.updateMask(mask: '(##) ####-####');
+              setState(() {});
+            }
+          },
+          buildCounter: (
+            BuildContext context, {
+            required int currentLength,
+            required bool isFocused,
+            required int? maxLength,
+          }) {
+            String? error;
+            String unmasked = telefoneMaskFormatter.getUnmaskedText();
+            if (_telefoneController.text.isEmpty) {
+              error = 'Por favor, insira seu Telefone';
+            } else if (unmasked.length != 10 && unmasked.length != 11) {
+              error = 'Digite todos os números do Telefone';
+            }
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (error != null)
+                  Text(
+                    error,
+                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                  ),
+                Text(
+                  '$currentLength/15 caracteres',
+                  style: const TextStyle(fontSize: 12),
+                ),
+              ],
+            );
+          },
+          validator: (value) {
+            String unmasked = telefoneMaskFormatter.getUnmaskedText();
+            if (value == null || value.isEmpty) {
+              return 'Por favor, insira seu Telefone';
+            }
+            if (unmasked.length != 10 && unmasked.length != 11) {
+              return 'Digite todos os números do Telefone';
+            }
+            return null;
+          },
         );
-      },
-      validator: (value) {
-        String unmasked = telefoneMaskFormatter.getUnmaskedText();
-        if (value == null || value.isEmpty) {
-          return 'Por favor, insira seu Telefone';
-        }
-        if (unmasked.length != 10 && unmasked.length != 11) {
-          return 'Digite todos os números do Telefone';
-        }
-        return null;
       },
     );
   }
@@ -537,7 +617,7 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Colors.red),
+                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -554,7 +634,7 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Colors.red),
+                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -575,7 +655,7 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Colors.red),
+                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -599,7 +679,7 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Colors.red),
+                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -617,7 +697,7 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Colors.red),
+                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -640,7 +720,7 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Colors.red),
+                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
               )
             else if (ageText != null)
               Text(
@@ -766,7 +846,7 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Colors.red),
+                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
               ),
             Text(
               '$currentLength/10 caracteres', // CORRIGIDO PARA 10!
@@ -846,7 +926,7 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Colors.red),
+                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
               ),
             Text(
               '$currentLength/200 caracteres',
