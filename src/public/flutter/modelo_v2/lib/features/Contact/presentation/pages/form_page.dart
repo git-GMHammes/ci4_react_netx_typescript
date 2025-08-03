@@ -54,6 +54,28 @@ class _FormPageState extends State<FormPage> {
   Future<void> _submitForm() async {
     if (_formKey.currentState?.validate() != true) return;
 
+    // Função para converter DD/MM/AAAA para AAAA-MM-DD
+    String convertDateFormat(String dataBrasileira) {
+      if (dataBrasileira.isEmpty) return '';
+
+      try {
+        // Remove a máscara e pega apenas os números
+        String numbersOnly = dataBrasileira.replaceAll('/', '');
+
+        if (numbersOnly.length == 8) {
+          String day = numbersOnly.substring(0, 2);
+          String month = numbersOnly.substring(2, 4);
+          String year = numbersOnly.substring(4, 8);
+
+          return '$year-$month-$day'; // Formato ISO: AAAA-MM-DD
+        }
+      } catch (e) {
+        print('Erro ao converter data: $e');
+      }
+
+      return dataBrasileira; // Retorna original se houver erro
+    }
+
     Map<String, dynamic> data = {
       "nome": _nomeController.text.trim(),
       "cpf": _cpfController.text.trim(),
@@ -61,10 +83,16 @@ class _FormPageState extends State<FormPage> {
       "whatsapp": _whatsappController.text.trim(),
       "senha": _senhaController.text.trim(),
       "telefone": _telefoneController.text.trim(),
-      "data_nascimento": _dataNascimentoController.text.trim(),
+      "data_nascimento": convertDateFormat(
+        _dataNascimentoController.text.trim(),
+      ), // CONVERSÃO AQUI!
       "cep": _cepController.text.trim(),
       "endereco": _enderecoController.text.trim(),
     };
+
+    // Log para debug - veja como a data está sendo enviada
+    print('Data convertida: ${data["data_nascimento"]}');
+    print('Dados enviados: ${jsonEncode(data)}');
 
     try {
       final response = await http.post(
@@ -72,9 +100,8 @@ class _FormPageState extends State<FormPage> {
         headers: {'Content-Type': 'application/json', 'Authorization': token},
         body: jsonEncode(data),
       );
-      // ignore: avoid_print
+
       print('Status code: ${response.statusCode}');
-      // ignore: avoid_print
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -87,7 +114,6 @@ class _FormPageState extends State<FormPage> {
           final backendDate = decoded['date'];
           final apiVersion = decoded['api']?['version'];
 
-          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -95,12 +121,13 @@ class _FormPageState extends State<FormPage> {
                 '$mensagem\n'
                 'ID: $insertID\n'
                 'Nome: $nomeSalvo\n'
-                'Data: $data\n'
+                'Data: $backendDate\n'
                 'Versão API: $apiVersion',
               ),
               duration: Duration(seconds: 3),
             ),
           );
+
           // Limpa os campos
           _nomeController.clear();
           _cpfController.clear();
@@ -125,7 +152,6 @@ class _FormPageState extends State<FormPage> {
             );
           }
         } else {
-          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -135,7 +161,6 @@ class _FormPageState extends State<FormPage> {
           );
         }
       } else if (response.statusCode == 409) {
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -146,8 +171,18 @@ class _FormPageState extends State<FormPage> {
             duration: Duration(seconds: 4),
           ),
         );
+      } else if (response.statusCode == 422) {
+        // TRATAMENTO PARA ERRO 422 (Unprocessable Content)
+        final decoded = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Dados inválidos: ${decoded['message'] ?? 'Verifique os campos preenchidos'}',
+            ),
+            duration: Duration(seconds: 4),
+          ),
+        );
       } else {
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Erro ao enviar dados: ${response.reasonPhrase}'),
@@ -156,7 +191,6 @@ class _FormPageState extends State<FormPage> {
       }
     } catch (e) {
       ScaffoldMessenger.of(
-        // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text('Erro: $e')));
     }
@@ -446,7 +480,7 @@ class _FormPageState extends State<FormPage> {
           decoration: const InputDecoration(
             labelText: 'Telefone',
             border: OutlineInputBorder(),
-            hintText: '(99) 99999-9999 ou (99) 9999-9999',
+            hintText: '(00) 0000-0000',
           ),
           keyboardType: TextInputType.phone,
           maxLength: 15,
