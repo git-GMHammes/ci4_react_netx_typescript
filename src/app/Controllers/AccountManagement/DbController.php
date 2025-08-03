@@ -161,6 +161,147 @@ class DbController extends BaseController
     # route GET /www/index.php/project/method
     # Informação sobre o controller
     # retorno do controller [JSON]
+    public function dbReadCPF($parameter = NULL, $page = 1, $limit = 10)
+    {
+        try {
+            if ($parameter !== NULL) {
+                $dbResponse = $this
+                    ->ModelUserManagement
+                    ->where('cpf', $parameter)
+                    ->where('deleted_at', NULL)
+                    ->orderBy('updated_at', 'asc')
+                    ->dBread()
+                    ->paginate(1, 'paginator', $page);
+                //
+            } else {
+                $dbResponse = $this
+                    ->ModelUserManagement
+                    ->where('deleted_at', NULL)
+                    ->orderBy('updated_at', 'asc')
+                    ->dBread()
+                    ->paginate($limit, 'paginator', $page);
+                //
+            }
+            ;
+            // Paginação
+            $pager = \Config\Services::pager();
+            $paginationLinks = $pager->makeLinks($page, $limit, $pager->getTotal('paginator'), 'default_full');
+            $linksArray = $this->pagination->extractPaginationLinks($paginationLinks);
+            //
+            $response = array(
+                'dbResponse' => $dbResponse,
+                'linksArray' => $linksArray
+            );
+            #
+        } catch (\Exception $e) {
+            if (DEBUG_MY_PRINT) {
+                myPrint($e->getMessage(), 'src\app\Controllers\ExempleDbController.php');
+            }
+            $message = $e->getMessage();
+            $this->message->message([$message], 'danger', $parameter, 5);
+            $response = array();
+        }
+        return $response;
+    }
+
+    # route POST /www/index.php/project/method
+    # route GET /www/index.php/project/method
+    # Informação sobre o controller
+    # retorno do controller [JSON]
+    public function dbReadWhatsapp($parameter = NULL, $page = 1, $limit = 10)
+    {
+        try {
+            if ($parameter !== NULL) {
+                $dbResponse = $this
+                    ->ModelUserManagement
+                    ->where('whatsapp', $parameter)
+                    ->where('deleted_at', NULL)
+                    ->orderBy('updated_at', 'asc')
+                    ->dBread()
+                    ->paginate(1, 'paginator', $page);
+                //
+            } else {
+                $dbResponse = $this
+                    ->ModelUserManagement
+                    ->where('deleted_at', NULL)
+                    ->orderBy('updated_at', 'asc')
+                    ->dBread()
+                    ->paginate($limit, 'paginator', $page);
+                //
+            }
+            ;
+            // Paginação
+            $pager = \Config\Services::pager();
+            $paginationLinks = $pager->makeLinks($page, $limit, $pager->getTotal('paginator'), 'default_full');
+            $linksArray = $this->pagination->extractPaginationLinks($paginationLinks);
+            //
+            $response = array(
+                'dbResponse' => $dbResponse,
+                'linksArray' => $linksArray
+            );
+            #
+        } catch (\Exception $e) {
+            if (DEBUG_MY_PRINT) {
+                myPrint($e->getMessage(), 'src\app\Controllers\ExempleDbController.php');
+            }
+            $message = $e->getMessage();
+            $this->message->message([$message], 'danger', $parameter, 5);
+            $response = array();
+        }
+        return $response;
+    }
+
+    # route POST /www/index.php/project/method
+    # route GET /www/index.php/project/method
+    # Informação sobre o controller
+    # retorno do controller [JSON]
+    public function dbReadEmail($parameter = NULL, $page = 1, $limit = 10)
+    {
+        try {
+            if ($parameter !== NULL) {
+                $dbResponse = $this
+                    ->ModelUserManagement
+                    ->where('email', $parameter)
+                    ->where('deleted_at', NULL)
+                    ->orderBy('updated_at', 'asc')
+                    ->dBread()
+                    ->paginate(1, 'paginator', $page);
+                //
+            } else {
+                $dbResponse = $this
+                    ->ModelUserManagement
+                    ->where('deleted_at', NULL)
+                    ->orderBy('updated_at', 'asc')
+                    ->dBread()
+                    ->paginate($limit, 'paginator', $page);
+                //
+            }
+            ;
+            // Paginação
+            $pager = \Config\Services::pager();
+            $paginationLinks = $pager->makeLinks($page, $limit, $pager->getTotal('paginator'), 'default_full');
+            $linksArray = $this->pagination->extractPaginationLinks($paginationLinks);
+            //
+            $response = array(
+                'dbResponse' => $dbResponse,
+                'linksArray' => $linksArray
+            );
+            #
+        } catch (\Exception $e) {
+            if (DEBUG_MY_PRINT) {
+                myPrint($e->getMessage(), 'src\app\Controllers\ExempleDbController.php');
+            }
+            $message = $e->getMessage();
+            $this->message->message([$message], 'danger', $parameter, 5);
+            $response = array();
+        }
+        return $response;
+    }
+
+    # route POST /www/index.php/project/method
+    # route GET /www/index.php/project/method
+    # Informação sobre o controller
+    # retorno do controller [JSON]
     public function dbFilter($parameter = NULL, $page = 1, $limit = 10)
     {
         $parameter = $this->dbFieldsFilter($parameter);

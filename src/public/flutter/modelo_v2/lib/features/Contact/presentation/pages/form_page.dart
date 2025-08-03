@@ -84,7 +84,7 @@ class _FormPageState extends State<FormPage> {
           final insertID = decoded['result']?['insertID'];
           final nomeSalvo = decoded['result']?['dbCreate']?['nome'];
           final mensagem = decoded['message'];
-          final data = decoded['date'];
+          final backendDate = decoded['date'];
           final apiVersion = decoded['api']?['version'];
 
           // ignore: use_build_context_synchronously
@@ -112,10 +112,17 @@ class _FormPageState extends State<FormPage> {
           _cepController.clear();
           _enderecoController.clear();
 
-          // Aguarde a SnackBar sumir antes de redirecionar
           await Future.delayed(const Duration(seconds: 3));
           if (mounted) {
-            context.go('/'); // Redireciona para login!
+            context.go(
+              '/auth/instructions',
+              extra: {
+                "nome": decoded['result']?['dbCreate']?['nome'] ?? '',
+                "email": decoded['result']?['dbCreate']?['email'] ?? '',
+                "whatsapp": decoded['result']?['dbCreate']?['whatsapp'] ?? '',
+                "endereco": decoded['result']?['dbCreate']?['endereco'] ?? '',
+              },
+            );
           }
         } else {
           // ignore: use_build_context_synchronously
@@ -127,6 +134,18 @@ class _FormPageState extends State<FormPage> {
             ),
           );
         }
+      } else if (response.statusCode == 409) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Cadastro não realizado: já existe um cadastro com os dados enviados.\n'
+              'Favor entrar em contato com o suporte.\n'
+              'contato@habilidade.com.',
+            ),
+            duration: Duration(seconds: 4),
+          ),
+        );
       } else {
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
@@ -179,7 +198,10 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color.fromARGB(255, 167, 164, 164),
+                ),
               ),
             Text('$currentLength/150', style: const TextStyle(fontSize: 12)),
           ],
@@ -243,7 +265,10 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 161, 159, 159)),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color.fromARGB(255, 161, 159, 159),
+                ),
               ),
             Text(
               '$currentLength/14 caracteres',
@@ -378,7 +403,10 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color.fromARGB(255, 167, 164, 164),
+                ),
               ),
             Text(
               '$currentLength/15 caracteres',
@@ -454,7 +482,10 @@ class _FormPageState extends State<FormPage> {
                 if (error != null)
                   Text(
                     error,
-                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 167, 164, 164),
+                    ),
                   ),
                 Text(
                   '$currentLength/15 caracteres',
@@ -617,7 +648,10 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 167, 164, 164),
+                    ),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -634,7 +668,10 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 167, 164, 164),
+                    ),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -655,7 +692,10 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 167, 164, 164),
+                    ),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -679,7 +719,10 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 167, 164, 164),
+                    ),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -697,7 +740,10 @@ class _FormPageState extends State<FormPage> {
                 children: [
                   Text(
                     error!,
-                    style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color.fromARGB(255, 167, 164, 164),
+                    ),
                   ),
                   Text(
                     '$currentLength/10 caracteres',
@@ -720,7 +766,10 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color.fromARGB(255, 167, 164, 164),
+                ),
               )
             else if (ageText != null)
               Text(
@@ -846,7 +895,10 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color.fromARGB(255, 167, 164, 164),
+                ),
               ),
             Text(
               '$currentLength/10 caracteres', // CORRIGIDO PARA 10!
@@ -926,7 +978,10 @@ class _FormPageState extends State<FormPage> {
             if (error != null)
               Text(
                 error,
-                style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 167, 164, 164)),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color.fromARGB(255, 167, 164, 164),
+                ),
               ),
             Text(
               '$currentLength/200 caracteres',

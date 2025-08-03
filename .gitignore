@@ -13,3 +13,5 @@ src/public/flutter/modelo_v2/web/*
 src/public/flutter/modelo_v2/windows/*
 src/writable/debugbar/debugbar_*
 src/writable/logs/log*
+src/writable/session/*
+src/app/Config/Constants.php

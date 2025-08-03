@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:modelo_v2/features/auth/presentation/pages/auth_page.dart';
+import 'package:modelo_v2/features/auth/presentation/pages/auth_instructions_page.dart';
 import 'package:modelo_v2/features/geolocationmap/presentation/pages/geolocationmap_page.dart';
 import 'package:modelo_v2/features/home/presentation/pages/home_page.dart';
 import 'package:modelo_v2/features/profile/presentation/pages/profile_page.dart';
@@ -24,6 +25,14 @@ final appRouter = GoRouter(
       },
       routes: [
         GoRoute(path: '/', builder: (context, state) => const AuthPage()),
+        GoRoute(
+          path: '/auth/instructions',
+          builder:
+              (context, state) => AuthInstructionsPage(
+                cadastro:
+                    state.extra as Map<String, dynamic>?, // <-- aqui dá erro
+              ),
+        ),
         GoRoute(path: '/home', builder: (context, state) => const HomePage()),
         GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
         GoRoute(path: '/contato', builder: (context, state) => ContatoPage()),

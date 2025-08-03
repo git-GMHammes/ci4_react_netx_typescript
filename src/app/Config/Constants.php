@@ -22,6 +22,7 @@ $varHP4 = florinda('aGFiaWxpZGFkZTA3');
 $varHP5 = florinda('TXlTUUxp');
 $varHP6 = (int) florinda('MzMwNg==');
 #
+$varM1 = florinda('TWk1dEVyaTBAMjAyMg==');
 /*
  | --------------------------------------------------------------------------
  | Composer Path
@@ -32,6 +33,8 @@ $varHP6 = (int) florinda('MzMwNg==');
  */
 defined('COMPOSER_PATH') || define('COMPOSER_PATH', ROOTPATH . 'vendor/autoload.php');
 defined('KEY_JWT') || define('KEY_JWT', '7295152A9509131B1F392A4A1F5851CA');
+defined('F58B9E8A887C14D97BA7B94BC407EB86') || define('F58B9E8A887C14D97BA7B94BC407EB86', $varM1);
+
 /*
  |--------------------------------------------------------------------------
  | Timing Constants

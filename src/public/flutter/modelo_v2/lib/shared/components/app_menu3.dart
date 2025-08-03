@@ -29,56 +29,50 @@ class AppMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = _getSelectedIndex(context);
-    // Tamanho de cada item calculado para caber 5 no máximo na tela
-    final double itemWidth = MediaQuery.of(context).size.width / 5;
 
-    return SafeArea(
-      top: false,
-      child: Container(
-        color:
-            Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
-            Colors.white,
-        padding: const EdgeInsets.only(bottom: 8, top: 8),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: List.generate(_items.length, (index) {
-              final item = _items[index];
-              final selected = selectedIndex == index;
-              return SizedBox(
-                width: itemWidth,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () => context.go(item.route),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        item.icon,
+    return Container(
+      color:
+          Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
+          Colors.white,
+      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(_items.length, (index) {
+            final item = _items[index];
+            final selected = selectedIndex == index;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => context.go(item.route),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      item.icon,
+                      color:
+                          selected
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.grey,
+                    ),
+                    Text(
+                      item.label,
+                      style: TextStyle(
                         color:
                             selected
                                 ? Theme.of(context).colorScheme.primary
                                 : Colors.grey,
+                        fontWeight:
+                            selected ? FontWeight.bold : FontWeight.normal,
+                        fontSize: 12,
                       ),
-                      Text(
-                        item.label,
-                        style: TextStyle(
-                          color:
-                              selected
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Colors.grey,
-                          fontWeight:
-                              selected ? FontWeight.bold : FontWeight.normal,
-                          fontSize: 12,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              );
-            }),
-          ),
+              ),
+            );
+          }),
         ),
       ),
     );

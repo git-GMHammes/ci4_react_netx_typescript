@@ -45,6 +45,11 @@
     print_r($dataBaseConfig2);
     ?>
     </pre>
+    <hr/>
+    <?php
+    echo encodeToBase64('Mi5tEri0@2022');
+    ?>
+    <hr/>
     <?php
 
     /**

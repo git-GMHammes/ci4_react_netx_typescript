@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controllers\Pattern;
-
 use CodeIgniter\Controller;
 use Exception;
 
