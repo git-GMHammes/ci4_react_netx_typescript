@@ -124,13 +124,6 @@ class ApiController extends ResourceController
         return $dbSave;
     }
 
-    private function returnRash($hashDatabase, $inputPassword)
-    {
-        if (!$hashDatabase)
-            return false;
-        return password_verify($inputPassword, $hashDatabase);
-    }
-
     # route POST /www/index.php/habilidade/usuario/api/salvar/(:any)
     # route GET /www/index.php/habilidade/usuario/api/salvar/(:any)
     # Informação sobre o controller
@@ -144,47 +137,33 @@ class ApiController extends ResourceController
         $request = service('request');
         $getMethod = $request->getMethod();
         $processRequest = (array) $request->getVar();
-        // $uploadedFiles = $request->getFiles();
-        // $processRequest['assinatura'] = $this->assinatura($processRequest);
-        if (isset($processRequest['data_nascimento'])) {
-            $processRequest['data_nascimento'] = $this->validateAmericanDate($processRequest['data_nascimento']);
-            if (empty($processRequest['data_nascimento'])) {
-                $response = [
-                    'status' => 'error',
-                    'message' => 'Data de nascimento inválida.',
-                    'date' => date('Y-m-d'),
-                    'api' => [
-                        'version' => '1.0',
-                        'method' => $getMethod,
-                        'description' => 'API Description',
-                        'content_type' => 'application/x-www-form-urlencoded'
-                    ],
-                    'result' => [],
-                    'metadata' => [
-                        'page_title' => 'Application title',
-                        'getURI' => $this->uri->getSegments(),
-                    ]
-                ];
-                return $this->response->setStatusCode(422)->setJSON($response);
-            }
-        }
-        if (isset($processRequest['whatsapp'])) {
-            $processRequest['zapMail'] = $processRequest['whatsapp'];
-            $processRequest['whatsapp'] = $this->treatTelephone($processRequest['whatsapp']);
-            $processRequest['user'] = $this->treatTelephone($processRequest['whatsapp']);
-            $processRequest['login'] = $this->treatTelephone($processRequest['whatsapp']);
-        } else {
-            $processRequest['zapMail'] = '';
-        }
-        if ($this->treatDuplicity($processRequest)) {
-            $response = $this->getErrorResponse($getMethod);
-            return $this->response->setStatusCode(409)->setJSON($response);
-        }
         #
-        if ($getMethod == 'GET') {
-            return $this->response->setStatusCode(200)->setJSON(['status' => 'invalid', 'message' => 'A requisição foi processada com sucesso, mas não há conteúdo para retornar no corpo da resposta.', 'date' => date('Y-m-d'), 'api' => ['version' => '1.0', 'method' => $getMethod, 'description' => 'API Description', 'content_type' => 'application/x-www-form-urlencoded'], 'result' => ['data' => 'void'], 'metadata' => ['page_title' => 'Application title', 'getURI' => ['index.php', 'fph', 'usuario', 'api', 'atualizar']]]);
-        }
         try {
+            if (isset($processRequest['data_nascimento'])) {
+                $processRequest['data_nascimento'] = $this->validateAmericanDate($processRequest['data_nascimento']);
+                if (empty($processRequest['data_nascimento'])) {
+                    $code = 422;
+                    $response = $this->getResponseApiRest($getMethod, $code);
+                    return $this->response->setStatusCode($code)->setJSON($response);
+                }
+            }
+            if (isset($processRequest['whatsapp'])) {
+                $processRequest['zapMail'] = $processRequest['whatsapp'];
+                $processRequest['whatsapp'] = $this->treatTelephone($processRequest['whatsapp']);
+                $processRequest['user'] = $this->treatTelephone($processRequest['whatsapp']);
+                $processRequest['login'] = $this->treatTelephone($processRequest['whatsapp']);
+            } else {
+                $processRequest['zapMail'] = '';
+            }
+            if ($this->treatDuplicity($processRequest)) {
+                $code = 409;
+                $response = $this->getResponseApiRest($getMethod, $code);
+                return $this->response->setStatusCode($code)->setJSON($response);
+            }
+            #
+            if ($getMethod == 'GET') {
+                return $this->response->setStatusCode(200)->setJSON(['status' => 'invalid', 'message' => 'A requisição foi processada com sucesso, mas não há conteúdo para retornar no corpo da resposta.', 'date' => date('Y-m-d'), 'api' => ['version' => '1.0', 'method' => $getMethod, 'description' => 'API Description', 'content_type' => 'application/x-www-form-urlencoded'], 'result' => ['data' => 'void'], 'metadata' => ['page_title' => 'Application title', 'getURI' => ['index.php', 'fph', 'usuario', 'api', 'atualizar']]]);
+            }
             #
             $token_csrf = (isset($processRequest['token_csrf']) ? $processRequest['token_csrf'] : 'erro');
             $json = isset($processRequest['json']) && $processRequest['json'] == 1 ? 1 : 0;
@@ -201,13 +180,7 @@ class ApiController extends ResourceController
             $response = $this->response->setStatusCode(500)->setJSON($apiRespond);
         }
         #
-        if ($json) {
-            return $response;
-            // return redirect()->to('project/endpoint/parameter/parameter/' . $parameter);
-        } else {
-            // return redirect()->back();
-            return $response;
-        }
+        return $response;
     }
 
     private function treatTelephone($parameter)
@@ -270,11 +243,44 @@ class ApiController extends ResourceController
         // Não é formato válido
         return '';
     }
-    private function getErrorResponse($getMethod)
+    private function getResponseApiRest($getMethod, $code, $getMessage = false)
     {
+        switch ($code) {
+
+            case 200:
+                $status = 'success';
+                $message = 'Requisição bem-sucedida, autenticado.';
+                $resposta = 'Código de status HTTP 200 OK. Indica que a solicitação foi processada com sucesso pelo servidor e, no contexto de autenticação, significa que o login foi realizado corretamente. O usuário forneceu as credenciais válidas e agora está autenticado para acessar os recursos protegidos. Nenhum erro ocorreu durante o processo de autenticação.';
+                break;
+
+            case 401:
+                $status = 'error';
+                $message = 'Não autorizado, autenticação, necessária.';
+                $resposta = 'Código de status HTTP 401 Unauthorized. O servidor não conseguiu autenticar a solicitação porque as credenciais fornecidas (login e senha) estão incorretas ou ausentes. Esse erro ocorre quando o acesso ao recurso solicitado requer autenticação válida, mas as informações enviadas não são reconhecidas ou não foram fornecidas. Para corrigir, verifique se o login e a senha estão corretos e envie as credenciais apropriadas no cabeçalho da requisição.';
+                break;
+
+            case 409:
+                $status = 'error';
+                $message = 'Conflito, recurso, existente.';
+                $resposta = 'Código de status HTTP 409 Conflict. O servidor não pôde completar a solicitação devido a um conflito com o estado atual do recurso. Esse erro geralmente ocorre quando há uma tentativa de criar ou atualizar um recurso que já existe ou conflita com outra operação simultânea. Para corrigir, verifique se os dados enviados não entram em conflito com registros existentes ou revise a lógica da aplicação para tratar atualizações concorrentes adequadamente.';
+                break;
+
+            case 422:
+                $status = 'error';
+                $message = 'Entidade inválida, processável. Verifique os dados enviados.';
+                $resposta = 'Código de status HTTP 422 Unprocessable Entity. O servidor entende o tipo de conteúdo da solicitação e a sintaxe está correta, mas não conseguiu processar as instruções presentes. Esse erro geralmente ocorre quando os dados fornecidos estão semanticamente errados ou incompletos para a operação solicitada, como ao enviar um formulário com campos obrigatórios ausentes ou valores inválidos. Para corrigir, revise os dados enviados e garanta que estão em conformidade com as regras esperadas pelo endpoint.';
+                break;
+
+            default:
+                $status = 'error';
+                $message = isset($getMessage) ? $getMessage : 'Não Sou uma chaleira. Nenhum codigo foi definido.';
+                $resposta = "Código de status HTTP 418 I'm a teapot. Esse código é uma resposta humorística definida pelo protocolo HTCPCP, indicando que o servidor se recusa a preparar café porque é uma chaleira. Não deve ser usado em aplicações reais, mas serve como resposta divertida quando a solicitação não faz sentido ou para fins de teste/brincadeira em APIs.";
+                break;
+        }
+
         $response = [
-            "status" => "erro",
-            "message" => "A requisição não pôde ser concluída devido a um conflito com o estado atual do recurso",
+            'status' => $status,
+            'message' => $message,
             "date" => date('Y-m-d'),
             "api" => [
                 "version" => "1.0",
@@ -283,7 +289,7 @@ class ApiController extends ResourceController
                 "content_type" => "application/x-www-form-urlencoded"
             ],
             "result" => [
-                "resposta" => "O Cadastro já existe",
+                "resposta" => $resposta,
             ],
             "metadata" => [
                 "page_title" => "Application title",
@@ -366,24 +372,41 @@ class ApiController extends ResourceController
         $json = isset($processRequest['json']) && $processRequest['json'] == 1 ? 1 : 0;
         $id = isset($processRequest['id']) ? ($processRequest['id']) : ($parameter);
         #
-        myPrint($getMethod, 'src\app\Controllers\AccountManagement\ApiController.php');
         try {
             #
-            $requestDb = $this->DbController->dbRead($id, $page, $limit);
+            $requestDb = [];
+            $senhaInformada = '';
+            $senhaHashBanco = '';
+            if (
+                isset($processRequest['login'])
+                && isset($processRequest['senha'])
+            ) {
+                $senhaInformada = $processRequest['senha'];
+                $requestDb = $this->DbController->dbReadLogin($processRequest['login'], $page, $limit);
+            }
+            if (isset($requestDb['dbResponse'][0]['senha'])) {
+                $senhaHashBanco = $requestDb['dbResponse'][0]['senha'];
+            } else {
+                $apiRespond = $this->setApiRespond('error', $getMethod, $requestDb, 'Usuário ou senha inválidos');
+                return $this->response->setStatusCode(401)->setJSON($apiRespond);
+            }
+            $verifyLogin = password_verify($senhaInformada, $senhaHashBanco);
+            if ($verifyLogin) {
+                $code = 200;
+                $response = $this->getResponseApiRest($getMethod, $code);
+                return $this->response->setStatusCode($code)->setJSON($response);
+            } else {
+                $code = 401;
+                $response = $this->getResponseApiRest($getMethod, $code);
+                return $this->response->setStatusCode($code)->setJSON($response);
+            }
             #
-            $apiRespond = $this->setApiRespond('success', $getMethod, $requestDb);
-            $response = $this->response->setStatusCode(201)->setJSON($apiRespond);
+
         } catch (\Exception $e) {
-            $apiRespond = $this->setApiRespond('error', $getMethod, $requestDb, $e->getMessage());
-            // myPrint('Exception $e :: ', $e->getMessage());
-            $response = $this->response->setStatusCode(500)->setJSON($apiRespond);
-        }
-        if ($json == 1) {
-            return $response;
-            // return redirect()->back();
-            // return redirect()->to('project/endpoint/parameter/parameter/' . $parameter);
-        } else {
-            return $response;
+            $code = 500;
+            $message = $e->getMessage();
+            $response = $this->getResponseApiRest($getMethod, $code, $message);
+            return $this->response->setStatusCode($code)->setJSON($response);
         }
     }
 

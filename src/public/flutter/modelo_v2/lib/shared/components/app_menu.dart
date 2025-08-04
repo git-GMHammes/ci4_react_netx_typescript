@@ -12,6 +12,7 @@ class AppMenu extends StatelessWidget {
       icon: Icons.info,
       label: 'Instruções',
     ),
+    NavigationItem(route: '/auth/acceptance', icon: Icons.check, label: 'Termo'),
     NavigationItem(route: '/profile', icon: Icons.person, label: 'Profile'),
     NavigationItem(route: '/home', icon: Icons.home, label: 'Home'),
     NavigationItem(
