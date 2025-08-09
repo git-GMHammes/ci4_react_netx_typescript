@@ -26,6 +26,7 @@ final appRouter = GoRouter(
       },
       routes: [
         GoRoute(path: '/', builder: (context, state) => const AuthPage()),
+        GoRoute(path: '/login', builder: (context, state) => const AuthPage()),
         GoRoute(
           path: '/auth/instructions',
           builder:

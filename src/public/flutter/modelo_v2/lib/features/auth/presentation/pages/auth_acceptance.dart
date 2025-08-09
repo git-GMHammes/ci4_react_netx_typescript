@@ -1,4 +1,7 @@
+// ignore_for_file: deprecated_member_use, sort_child_properties_last
+
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Página principal mostrando blocos de parágrafos usando widgets customizados
 class AuthAcceptancePage extends StatelessWidget {
@@ -38,6 +41,10 @@ class AuthAcceptancePage extends StatelessWidget {
 
             /// Bloco 007 - Disposições Legais e Foro Competente
             BuildBlock007(),
+            SizedBox(height: 24),
+
+            /// Botões
+            AcceptanceButtons(),
             SizedBox(height: 24),
           ],
         ),
@@ -944,6 +951,66 @@ class BuildBlock007 extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class AcceptanceButtons extends StatelessWidget {
+  const AcceptanceButtons({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Cores leves (pastel)
+    const Color lightGreen = Color(0xFFD6F5E6); // verde leve
+    const Color lightRed = Color(0xFFF8D6D6); // vermelho leve
+    const Color greenText = Color(0xFF3AB16B); // verde para o texto
+    const Color redText = Color(0xFFD34C4C); // vermelho para o texto
+
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () => context.go('/home'),
+            child: const Text(
+              'Sim',
+              style: TextStyle(color: greenText, fontWeight: FontWeight.bold),
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(lightGreen),
+              elevation: MaterialStateProperty.all(8),
+              shadowColor: MaterialStateProperty.all(
+                greenText.withOpacity(0.2),
+              ),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              overlayColor: MaterialStateProperty.all(
+                greenText.withOpacity(0.1),
+              ), // efeito ao clicar
+            ),
+          ),
+          const SizedBox(width: 16),
+          ElevatedButton(
+            onPressed: () => context.go('/login'),
+            child: const Text(
+              'Não',
+              style: TextStyle(color: redText, fontWeight: FontWeight.bold),
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(lightRed),
+              elevation: MaterialStateProperty.all(8),
+              shadowColor: MaterialStateProperty.all(redText.withOpacity(0.2)),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              overlayColor: MaterialStateProperty.all(
+                redText.withOpacity(0.1),
+              ), // efeito ao clicar
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
