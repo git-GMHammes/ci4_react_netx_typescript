@@ -139,9 +139,9 @@ class ApiController extends ResourceController
         $processRequest = (array) $request->getVar();
         #
         try {
-            if (isset($processRequest['data_nascimento'])) {
-                $processRequest['data_nascimento'] = $this->validateAmericanDate($processRequest['data_nascimento']);
-                if (empty($processRequest['data_nascimento'])) {
+            if (isset($processRequest['date_birth'])) {
+                $processRequest['date_birth'] = $this->validateAmericanDate($processRequest['date_birth']);
+                if (empty($processRequest['date_birth'])) {
                     $code = 422;
                     $response = $this->getResponseApiRest($getMethod, $code);
                     return $this->response->setStatusCode($code)->setJSON($response);
@@ -168,9 +168,9 @@ class ApiController extends ResourceController
             $token_csrf = (isset($processRequest['token_csrf']) ? $processRequest['token_csrf'] : 'erro');
             $json = isset($processRequest['json']) && $processRequest['json'] == 1 ? 1 : 0;
             $choice_update = (isset($processRequest['id']) && !empty($processRequest['id'])) ? (true) : (false);
-            $senha = $processRequest['senha'];
-            $hashSeguro = password_hash($senha, PASSWORD_DEFAULT);
-            $processRequest['senha'] = $hashSeguro;
+            $password = $processRequest['password'];
+            $hashSeguro = password_hash($password, PASSWORD_DEFAULT);
+            $processRequest['password'] = $hashSeguro;
             #
             $dbSave = $this->saveRequest($choice_update, $token_csrf, $processRequest);
             $apiRespond = $this->setApiRespond($dbSave['status'], $getMethod, $dbSave['dbResponse']);
@@ -197,8 +197,8 @@ class ApiController extends ResourceController
         if (isset($processRequest['whatsapp'])) {
             $dbReadWhatsapp = $this->DbController->dbReadWhatsapp($processRequest['whatsapp']);
         }
-        if (isset($processRequest['email'])) {
-            $dbReadEmail = $this->DbController->dbReadEmail($processRequest['email']);
+        if (isset($processRequest['mail'])) {
+            $dbReadEmail = $this->DbController->dbReadEmail($processRequest['mail']);
         }
         if (
             isset($dbReadCPF['dbResponse'][0]['id'])
@@ -256,7 +256,7 @@ class ApiController extends ResourceController
             case 401:
                 $status = 'error';
                 $message = 'Não autorizado, autenticação, necessária.';
-                $resposta = 'Código de status HTTP 401 Unauthorized. O servidor não conseguiu autenticar a solicitação porque as credenciais fornecidas (login e senha) estão incorretas ou ausentes. Esse erro ocorre quando o acesso ao recurso solicitado requer autenticação válida, mas as informações enviadas não são reconhecidas ou não foram fornecidas. Para corrigir, verifique se o login e a senha estão corretos e envie as credenciais apropriadas no cabeçalho da requisição.';
+                $resposta = 'Código de status HTTP 401 Unauthorized. O servidor não conseguiu autenticar a solicitação porque as credenciais fornecidas (login e password) estão incorretas ou ausentes. Esse erro ocorre quando o acesso ao recurso solicitado requer autenticação válida, mas as informações enviadas não são reconhecidas ou não foram fornecidas. Para corrigir, verifique se o login e a password estão corretos e envie as credenciais apropriadas no cabeçalho da requisição.';
                 break;
 
             case 409:
@@ -373,24 +373,26 @@ class ApiController extends ResourceController
         $id = isset($processRequest['id']) ? ($processRequest['id']) : ($parameter);
         #
         try {
+            myPrint('$processRequest :: ', $processRequest);
             #
             $requestDb = [];
-            $senhaInformada = '';
-            $senhaHashBanco = '';
+            $passwordInformada = '';
+            $passwordHashBanco = '';
             if (
                 isset($processRequest['login'])
-                && isset($processRequest['senha'])
+                && isset($processRequest['password'])
+                && isset($processRequest['password'])
             ) {
-                $senhaInformada = $processRequest['senha'];
+                $passwordInformada = $processRequest['password'];
                 $requestDb = $this->DbController->dbReadLogin($processRequest['login'], $page, $limit);
             }
-            if (isset($requestDb['dbResponse'][0]['senha'])) {
-                $senhaHashBanco = $requestDb['dbResponse'][0]['senha'];
+            if (isset($requestDb['dbResponse'][0]['password'])) {
+                $passwordHashBanco = $requestDb['dbResponse'][0]['password'];
             } else {
-                $apiRespond = $this->setApiRespond('error', $getMethod, $requestDb, 'Usuário ou senha inválidos');
+                $apiRespond = $this->setApiRespond('error', $getMethod, $requestDb, 'Usuário ou password inválidos');
                 return $this->response->setStatusCode(401)->setJSON($apiRespond);
             }
-            $verifyLogin = password_verify($senhaInformada, $senhaHashBanco);
+            $verifyLogin = password_verify($passwordInformada, $passwordHashBanco);
             if ($verifyLogin) {
                 $code = 200;
                 $response = $this->getResponseApiRest($getMethod, $code);

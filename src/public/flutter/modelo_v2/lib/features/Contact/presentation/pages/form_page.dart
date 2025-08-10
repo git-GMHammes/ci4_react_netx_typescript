@@ -21,17 +21,17 @@ class FormPage extends StatefulWidget {
 
 class _FormPageState extends State<FormPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _senhaVisivel = false;
+  bool _passwordVisivel = false;
 
   // CAMPOS DO FORMULÁRIO
-  final _nomeController = TextEditingController();
+  final _nameController = TextEditingController();
   final _cpfController = TextEditingController();
-  final _emailController = TextEditingController();
+  final _mailController = TextEditingController();
   final _whatsappController = TextEditingController();
-  final _senhaController = TextEditingController();
-  final _telefoneController = TextEditingController();
-  final _dataNascimentoController = TextEditingController();
-  final _cepController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _dateBirthController = TextEditingController();
+  final _zipCodeController = TextEditingController();
   final _enderecoController = TextEditingController();
   final _numeroController = TextEditingController();
   final _complementoController = TextEditingController();
@@ -53,14 +53,14 @@ class _FormPageState extends State<FormPage> {
 
   @override
   void dispose() {
-    _nomeController.dispose();
-    _emailController.dispose();
+    _nameController.dispose();
+    _mailController.dispose();
     _cpfController.dispose();
     _whatsappController.dispose();
-    _senhaController.dispose();
-    _telefoneController.dispose();
-    _dataNascimentoController.dispose();
-    _cepController.dispose();
+    _passwordController.dispose();
+    _phoneController.dispose();
+    _dateBirthController.dispose();
+    _zipCodeController.dispose();
     _enderecoController.dispose();
     // Controladores para os campos invisíveis
     _numeroController.dispose();
@@ -100,17 +100,17 @@ class _FormPageState extends State<FormPage> {
     }
 
     Map<String, dynamic> data = {
-      "nome": _nomeController.text.trim(),
+      "name": _nameController.text.trim(),
       "cpf": _cpfController.text.trim(),
-      "email": _emailController.text.trim(),
+      "mail": _mailController.text.trim(),
       "whatsapp": _whatsappController.text.trim(),
-      "senha": _senhaController.text.trim(),
-      "telefone": _telefoneController.text.trim(),
+      "password": _passwordController.text.trim(),
+      "phone": _phoneController.text.trim(),
       "data_nascimento": convertDateFormat(
-        _dataNascimentoController.text.trim(),
+        _dateBirthController.text.trim(),
       ), // CONVERSÃO AQUI!
-      "cep": _cepController.text.trim(),
-      "endereco": _enderecoController.text.trim(),
+      "zipCode": _zipCodeController.text.trim(),
+      "address": _enderecoController.text.trim(),
     };
 
     // Log para debug - veja como a data está sendo enviada
@@ -132,7 +132,7 @@ class _FormPageState extends State<FormPage> {
         if (decoded['status'] == 'success') {
           // Dados retornados
           final insertID = decoded['result']?['insertID'];
-          final nomeSalvo = decoded['result']?['dbCreate']?['nome'];
+          final nameSalvo = decoded['result']?['dbCreate']?['name'];
           final mensagem = decoded['message'];
           final backendDate = decoded['date'];
           final apiVersion = decoded['api']?['version'];
@@ -144,7 +144,7 @@ class _FormPageState extends State<FormPage> {
                 'Sucesso!\n'
                 '$mensagem\n'
                 'ID: $insertID\n'
-                'Nome: $nomeSalvo\n'
+                'Name: $nameSalvo\n'
                 'Data: $backendDate\n'
                 'Versão API: $apiVersion',
               ),
@@ -153,14 +153,14 @@ class _FormPageState extends State<FormPage> {
           );
 
           // Limpa os campos
-          _nomeController.clear();
+          _nameController.clear();
           _cpfController.clear();
-          _emailController.clear();
+          _mailController.clear();
           _whatsappController.clear();
-          _senhaController.clear();
-          _telefoneController.clear();
-          _dataNascimentoController.clear();
-          _cepController.clear();
+          _passwordController.clear();
+          _phoneController.clear();
+          _dateBirthController.clear();
+          _zipCodeController.clear();
           _enderecoController.clear();
 
           await Future.delayed(const Duration(seconds: 3));
@@ -168,10 +168,10 @@ class _FormPageState extends State<FormPage> {
             context.go(
               '/auth/instructions',
               extra: {
-                "nome": decoded['result']?['dbCreate']?['nome'] ?? '',
-                "email": decoded['result']?['dbCreate']?['email'] ?? '',
+                "name": decoded['result']?['dbCreate']?['name'] ?? '',
+                "mail": decoded['result']?['dbCreate']?['mail'] ?? '',
                 "whatsapp": decoded['result']?['dbCreate']?['whatsapp'] ?? '',
-                "endereco": decoded['result']?['dbCreate']?['endereco'] ?? '',
+                "address": decoded['result']?['dbCreate']?['address'] ?? '',
               },
             );
           }
@@ -225,12 +225,12 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  Future<void> _buscarEnderecoPorCep(String cep) async {
-    String cepLimpo = cep.replaceAll(RegExp(r'[.-]'), '');
+  Future<void> _buscarAddressPorCep(String zipCode) async {
+    String zipCodeLimpo = zipCode.replaceAll(RegExp(r'[.-]'), '');
 
     try {
       final response = await http.get(
-        Uri.parse('https://viacep.com.br/ws/$cepLimpo/json/'),
+        Uri.parse('https://viazipCode.com.br/ws/$zipCodeLimpo/json/'),
       );
 
       if (response.statusCode == 200) {
@@ -249,24 +249,24 @@ class _FormPageState extends State<FormPage> {
           _dddController.text = data['ddd'] ?? '';
 
           // Constrói o endereço automaticamente
-          _construirEndereco();
+          _construirAddress();
 
           // Concatena os dados do endereço para mostrar na mensagem
-          String endereco = '';
+          String address = '';
           if (data['logradouro'] != null && data['logradouro'].isNotEmpty) {
-            endereco += data['logradouro'];
+            address += data['logradouro'];
           }
           if (data['bairro'] != null && data['bairro'].isNotEmpty) {
-            endereco += ', ${data['bairro']}';
+            address += ', ${data['bairro']}';
           }
           if (data['localidade'] != null && data['localidade'].isNotEmpty) {
-            endereco += ', ${data['localidade']}';
+            address += ', ${data['localidade']}';
           }
           if (data['uf'] != null && data['uf'].isNotEmpty) {
-            endereco += ' - ${data['uf']}';
+            address += ' - ${data['uf']}';
           }
 
-          _mostrarMensagem('Endereço encontrado: $endereco');
+          _mostrarMensagem('Endereço encontrado: $address');
         }
       } else {
         _mostrarMensagem('Erro ao buscar CEP. Tente novamente.');
@@ -276,55 +276,55 @@ class _FormPageState extends State<FormPage> {
     }
   }
 
-  void _construirEndereco() {
-    List<String> partesEndereco = [];
+  void _construirAddress() {
+    List<String> partesAddress = [];
 
     // Logradouro
     if (_logradouroController.text.isNotEmpty) {
-      partesEndereco.add(_logradouroController.text);
+      partesAddress.add(_logradouroController.text);
     }
 
     // Número
     if (_numeroController.text.isNotEmpty) {
       if (_numeroController.text == '0') {
-        partesEndereco.add('S/N');
+        partesAddress.add('S/N');
       } else {
-        partesEndereco.add('nº ${_numeroController.text}');
+        partesAddress.add('nº ${_numeroController.text}');
       }
     }
 
-    // Complemento
+    // Complement
     if (_complementoController.text.isNotEmpty) {
-      partesEndereco.add('Complemento: ${_complementoController.text}');
+      partesAddress.add('Complement: ${_complementoController.text}');
     }
 
     // Bairro
     if (_bairroController.text.isNotEmpty) {
-      partesEndereco.add(_bairroController.text);
+      partesAddress.add(_bairroController.text);
     }
 
     // Localidade
     if (_localidadeController.text.isNotEmpty) {
-      partesEndereco.add(_localidadeController.text);
+      partesAddress.add(_localidadeController.text);
     }
 
     // UF
     if (_ufController.text.isNotEmpty) {
-      partesEndereco.add(_ufController.text);
+      partesAddress.add(_ufController.text);
     }
 
     // Região
     if (_regiaoController.text.isNotEmpty) {
-      partesEndereco.add(_regiaoController.text);
+      partesAddress.add(_regiaoController.text);
     }
 
     // DDD
     if (_dddController.text.isNotEmpty) {
-      partesEndereco.add('DDD: ${_dddController.text}');
+      partesAddress.add('DDD: ${_dddController.text}');
     }
 
     // Junta todas as partes com vírgula e espaço
-    _enderecoController.text = partesEndereco.join(', ');
+    _enderecoController.text = partesAddress.join(', ');
   }
 
   void _mostrarMensagem(String mensagem) {
@@ -333,11 +333,11 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildNomeField() {
+  Widget buildNameField() {
     return TextFormField(
-      controller: _nomeController,
+      controller: _nameController,
       decoration: const InputDecoration(
-        labelText: 'Nome',
+        labelText: 'Name',
         border: OutlineInputBorder(),
       ),
       maxLength: 150,
@@ -351,14 +351,14 @@ class _FormPageState extends State<FormPage> {
         required int? maxLength,
       }) {
         String? error;
-        String value = _nomeController.text;
+        String value = _nameController.text;
 
         if (value.isEmpty || value.length < 4) {
-          error = 'Por favor, insira seu Nome';
+          error = 'Por favor, insira seu Name';
         } else if (!RegExp(r"^[A-Za-zÀ-ú\s]+$").hasMatch(value)) {
           error = 'Apenas letras são permitidas';
         } else if (value.length > 150) {
-          error = 'O nome deve ter no máximo 150 caracteres';
+          error = 'O name deve ter no máximo 150 caracteres';
         } else {
           error = null;
         }
@@ -380,13 +380,13 @@ class _FormPageState extends State<FormPage> {
       },
       validator: (value) {
         if (value == null || value.isEmpty || value.length < 4) {
-          return 'Por favor, insira seu Nome';
+          return 'Por favor, insira seu Name';
         }
         if (!RegExp(r"^[A-Za-zÀ-ú\s]+$").hasMatch(value)) {
           return 'Apenas letras são permitidas';
         }
         if (value.length > 150) {
-          return 'O nome deve ter no máximo 150 caracteres';
+          return 'O name deve ter no máximo 150 caracteres';
         }
         return null;
       },
@@ -464,13 +464,13 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildEmailField() {
+  Widget buildMailField() {
     return TextFormField(
-      controller: _emailController,
+      controller: _mailController,
       decoration: const InputDecoration(
-        labelText: 'Email',
+        labelText: 'Mail',
         border: OutlineInputBorder(),
-        hintText: 'exemplo@email.com',
+        hintText: 'exemplo@mail.com',
       ),
       keyboardType: TextInputType.emailAddress,
       maxLength: 151, // Para garantir limite total
@@ -480,7 +480,7 @@ class _FormPageState extends State<FormPage> {
         required bool isFocused,
         required int? maxLength,
       }) {
-        final text = _emailController.text;
+        final text = _mailController.text;
         final parts = text.split('@');
         final beforeAt = parts.isNotEmpty ? parts[0] : '';
         final afterAt = parts.length > 1 ? parts[1] : '';
@@ -500,10 +500,10 @@ class _FormPageState extends State<FormPage> {
       },
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Por favor, insira seu email';
+          return 'Por favor, insira seu mail';
         }
         final parts = value.split('@');
-        if (parts.length != 2) return 'O email deve conter apenas um @';
+        if (parts.length != 2) return 'O mail deve conter apenas um @';
         final local = parts[0];
         final domain = parts[1];
         if (local.length > 100) {
@@ -515,11 +515,11 @@ class _FormPageState extends State<FormPage> {
         if (!domain.contains('.')) {
           return 'O domínio deve conter ao menos um ponto (.) após o @';
         }
-        final emailRegex = RegExp(
+        final mailRegex = RegExp(
           r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
         );
-        if (!emailRegex.hasMatch(value)) {
-          return 'Por favor, insira um email válido';
+        if (!mailRegex.hasMatch(value)) {
+          return 'Por favor, insira um mail válido';
         }
         return null;
       },
@@ -602,45 +602,45 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildSenhaField() {
+  Widget buildPasswordField() {
     return TextFormField(
-      controller: _senhaController,
+      controller: _passwordController,
       decoration: InputDecoration(
-        labelText: 'Senha',
+        labelText: 'Password',
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(
-          icon: Icon(_senhaVisivel ? Icons.visibility : Icons.visibility_off),
+          icon: Icon(_passwordVisivel ? Icons.visibility : Icons.visibility_off),
           onPressed: () {
             setState(() {
-              _senhaVisivel = !_senhaVisivel;
+              _passwordVisivel = !_passwordVisivel;
             });
           },
         ),
       ),
-      obscureText: !_senhaVisivel,
+      obscureText: !_passwordVisivel,
       maxLength: 32,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Por favor, insira uma senha';
+          return 'Por favor, insira uma password';
         }
         if (value.length < 6) {
-          return 'A senha deve ter pelo menos 6 caracteres';
+          return 'A password deve ter pelo menos 6 caracteres';
         }
         if (value.length > 32) {
-          return 'A senha deve ter no máximo 32 caracteres';
+          return 'A password deve ter no máximo 32 caracteres';
         }
         if (!RegExp(r'[A-Za-z]').hasMatch(value)) {
-          return 'A senha deve conter ao menos uma letra';
+          return 'A password deve conter ao menos uma letra';
         }
         if (!RegExp(r'\d').hasMatch(value)) {
-          return 'A senha deve conter ao menos um número';
+          return 'A password deve conter ao menos um número';
         }
 
         // Regex para caracteres especiais (sem a aspa simples problemática)
         if (!RegExp(
           r'''[!@#\$%\^&\*\(\)_\+\-=\[\]\{\};:'<\.>\/\?\\|`~]''',
         ).hasMatch(value)) {
-          return 'A senha deve conter ao menos um caractere especial';
+          return 'A password deve conter ao menos um caractere especial';
         }
 
         // Regex para repetições corrigida
@@ -695,9 +695,9 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildTelefoneField() {
+  Widget buildPhoneField() {
     // Inicialmente, máscara de celular
-    final telefoneMaskFormatter = MaskTextInputFormatter(
+    final phoneMaskFormatter = MaskTextInputFormatter(
       mask: '(##) #####-####',
       filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy,
@@ -706,24 +706,24 @@ class _FormPageState extends State<FormPage> {
     return StatefulBuilder(
       builder: (context, setState) {
         return TextFormField(
-          controller: _telefoneController,
+          controller: _phoneController,
           decoration: const InputDecoration(
-            labelText: 'Telefone',
+            labelText: 'Phone',
             border: OutlineInputBorder(),
             hintText: '(00) 0000-0000',
           ),
           keyboardType: TextInputType.phone,
           maxLength: 15,
-          inputFormatters: [telefoneMaskFormatter],
+          inputFormatters: [phoneMaskFormatter],
           onChanged: (value) {
-            String numbers = telefoneMaskFormatter.getUnmaskedText();
+            String numbers = phoneMaskFormatter.getUnmaskedText();
             if (numbers.length > 10 &&
-                telefoneMaskFormatter.getMask() != '(##) #####-####') {
-              telefoneMaskFormatter.updateMask(mask: '(##) #####-####');
+                phoneMaskFormatter.getMask() != '(##) #####-####') {
+              phoneMaskFormatter.updateMask(mask: '(##) #####-####');
               setState(() {});
             } else if (numbers.length <= 10 &&
-                telefoneMaskFormatter.getMask() != '(##) ####-####') {
-              telefoneMaskFormatter.updateMask(mask: '(##) ####-####');
+                phoneMaskFormatter.getMask() != '(##) ####-####') {
+              phoneMaskFormatter.updateMask(mask: '(##) ####-####');
               setState(() {});
             }
           },
@@ -734,11 +734,11 @@ class _FormPageState extends State<FormPage> {
             required int? maxLength,
           }) {
             String? error;
-            String unmasked = telefoneMaskFormatter.getUnmaskedText();
-            if (_telefoneController.text.isEmpty) {
-              error = 'Por favor, insira seu Telefone';
+            String unmasked = phoneMaskFormatter.getUnmaskedText();
+            if (_phoneController.text.isEmpty) {
+              error = 'Por favor, insira seu Phone';
             } else if (unmasked.length != 10 && unmasked.length != 11) {
-              error = 'Digite todos os números do Telefone';
+              error = 'Digite todos os números do Phone';
             }
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -759,12 +759,12 @@ class _FormPageState extends State<FormPage> {
             );
           },
           validator: (value) {
-            String unmasked = telefoneMaskFormatter.getUnmaskedText();
+            String unmasked = phoneMaskFormatter.getUnmaskedText();
             if (value == null || value.isEmpty) {
-              return 'Por favor, insira seu Telefone';
+              return 'Por favor, insira seu Phone';
             }
             if (unmasked.length != 10 && unmasked.length != 11) {
-              return 'Digite todos os números do Telefone';
+              return 'Digite todos os números do Phone';
             }
             return null;
           },
@@ -773,7 +773,7 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildDataNascimentoField() {
+  Widget buildDateBirthField() {
     final dateMaskFormatter = MaskTextInputFormatter(
       mask: '##/##/####',
       filter: {"#": RegExp(r'[0-9]')},
@@ -781,7 +781,7 @@ class _FormPageState extends State<FormPage> {
     );
 
     return TextFormField(
-      controller: _dataNascimentoController,
+      controller: _dateBirthController,
       decoration: const InputDecoration(
         labelText: 'Data de Nascimento',
         border: OutlineInputBorder(),
@@ -804,7 +804,7 @@ class _FormPageState extends State<FormPage> {
 
         String unmasked = dateMaskFormatter.getUnmaskedText();
 
-        if (_dataNascimentoController.text.isEmpty) {
+        if (_dateBirthController.text.isEmpty) {
           error = 'Por favor, insira sua data de nascimento';
         } else if (unmasked.length < 8) {
           error = 'Digite a data completa';
@@ -1027,7 +1027,7 @@ class _FormPageState extends State<FormPage> {
   }
 
   Widget buildCepField() {
-    final cepMaskFormatter = MaskTextInputFormatter(
+    final zipCodeMaskFormatter = MaskTextInputFormatter(
       mask: '##.###-###',
       filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy,
@@ -1037,14 +1037,14 @@ class _FormPageState extends State<FormPage> {
       onFocusChange: (hasFocus) {
         // Quando o campo perde o foco
         if (!hasFocus) {
-          String unmasked = cepMaskFormatter.getUnmaskedText();
+          String unmasked = zipCodeMaskFormatter.getUnmaskedText();
           if (unmasked.length == 8) {
-            _buscarEnderecoPorCep(_cepController.text);
+            _buscarAddressPorCep(_zipCodeController.text);
           }
         }
       },
       child: TextFormField(
-        controller: _cepController,
+        controller: _zipCodeController,
         decoration: const InputDecoration(
           labelText: 'CEP',
           border: OutlineInputBorder(),
@@ -1053,7 +1053,7 @@ class _FormPageState extends State<FormPage> {
         keyboardType: TextInputType.number,
         maxLength: 10,
         inputFormatters: [
-          cepMaskFormatter,
+          zipCodeMaskFormatter,
           FilteringTextInputFormatter.allow(RegExp(r'[0-9.-]')),
         ],
         buildCounter: (
@@ -1063,13 +1063,13 @@ class _FormPageState extends State<FormPage> {
           required int? maxLength,
         }) {
           String? error;
-          String unmasked = cepMaskFormatter.getUnmaskedText();
+          String unmasked = zipCodeMaskFormatter.getUnmaskedText();
 
-          if (_cepController.text.isEmpty) {
+          if (_zipCodeController.text.isEmpty) {
             error = 'Por favor, insira seu CEP';
           } else if (unmasked.length < 8) {
             error = 'Digite o CEP completo';
-          } else if (!RegExp(r'^[0-9.-]+$').hasMatch(_cepController.text)) {
+          } else if (!RegExp(r'^[0-9.-]+$').hasMatch(_zipCodeController.text)) {
             error = 'Apenas números, ponto e hífen são permitidos';
           } else {
             error = null;
@@ -1094,13 +1094,13 @@ class _FormPageState extends State<FormPage> {
           );
         },
         onChanged: (value) {
-          String unmasked = cepMaskFormatter.getUnmaskedText();
+          String unmasked = zipCodeMaskFormatter.getUnmaskedText();
           if (unmasked.length == 8) {
             print('CEP completo: $unmasked');
           }
         },
         validator: (value) {
-          String unmasked = cepMaskFormatter.getUnmaskedText();
+          String unmasked = zipCodeMaskFormatter.getUnmaskedText();
 
           if (value == null || value.isEmpty) {
             return 'Por favor, insira seu CEP';
@@ -1110,7 +1110,7 @@ class _FormPageState extends State<FormPage> {
             return 'Digite o CEP completo';
           }
 
-          if (!cepMaskFormatter.isFill()) {
+          if (!zipCodeMaskFormatter.isFill()) {
             return 'Preencha o CEP completo';
           }
 
@@ -1124,7 +1124,7 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildNumeroField() {
+  Widget buildNumberField() {
     return Focus(
       onFocusChange: (hasFocus) {
         if (!hasFocus) {
@@ -1133,7 +1133,7 @@ class _FormPageState extends State<FormPage> {
             _numeroController.text = '0';
           }
           // Reconstrói o endereço quando o número muda
-          _construirEndereco();
+          _construirAddress();
         }
       },
       child: TextFormField(
@@ -1159,18 +1159,18 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildComplementoField() {
+  Widget buildComplementField() {
     return Focus(
       onFocusChange: (hasFocus) {
         if (!hasFocus) {
           // Reconstrói o endereço quando o complemento muda
-          _construirEndereco();
+          _construirAddress();
         }
       },
       child: TextFormField(
         controller: _complementoController,
         decoration: const InputDecoration(
-          labelText: 'Complemento',
+          labelText: 'Complement',
           border: OutlineInputBorder(),
           hintText: 'Digite o complemento',
           helperText: 'Campo não obrigatório',
@@ -1190,7 +1190,7 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
-  Widget buildEnderecoField() {
+  Widget buildAddressField() {
     return TextFormField(
       controller: _enderecoController,
       readOnly: true,
@@ -1293,8 +1293,8 @@ class _FormPageState extends State<FormPage> {
                   ),
                 ),
 
-                // Campo Nome
-                buildNomeField(),
+                // Campo Name
+                buildNameField(),
                 const SizedBox(height: 16.0),
 
                 // Campo CPF
@@ -1302,7 +1302,7 @@ class _FormPageState extends State<FormPage> {
                 const SizedBox(height: 16.0),
 
                 // Campo E-mail
-                buildEmailField(),
+                buildMailField(),
                 const SizedBox(height: 16.0),
 
                 // Campo Whatsapp
@@ -1310,31 +1310,31 @@ class _FormPageState extends State<FormPage> {
                 const SizedBox(height: 16.0),
 
                 // Campo Whatsapp
-                buildSenhaField(),
+                buildPasswordField(),
                 const SizedBox(height: 16.0),
 
-                // Campo Telefone
-                buildTelefoneField(),
+                // Campo Phone
+                buildPhoneField(),
                 const SizedBox(height: 16.0),
 
                 // Campo Data de Nascimento
-                buildDataNascimentoField(),
+                buildDateBirthField(),
                 const SizedBox(height: 16.0),
 
                 // Campo CEP
                 buildCepField(),
                 const SizedBox(height: 16.0),
 
-                // Campo Numero
-                buildNumeroField(),
+                // Campo Number
+                buildNumberField(),
                 const SizedBox(height: 16.0),
 
-                // Campo Complemento
-                buildComplementoField(),
+                // Campo Complement
+                buildComplementField(),
                 const SizedBox(height: 16.0),
 
                 // Campo Endereço
-                buildEnderecoField(),
+                buildAddressField(),
                 const SizedBox(height: 16.0),
 
                 // Campo Botão

@@ -85,6 +85,8 @@ class DbController extends BaseController
     public function dbCreate($parameter = NULL)
     {
         $parameter = $this->dbFields($parameter);
+        myPrint($parameter, 'src\app\Controllers\ExempleDbController.php');
+        $parameter['profile'] = isset($parameter['profile']) ? $parameter['profile'] : 'usuario';
         try {
             $this->ModelUserManagement->dbCreate($this->dbFields($parameter));
             $affectedRows = $this->ModelUserManagement->affectedRows();
@@ -308,7 +310,7 @@ class DbController extends BaseController
             if ($parameter !== NULL) {
                 $dbResponse = $this
                     ->ModelUserManagement
-                    ->where('email', $parameter)
+                    ->where('mail', $parameter)
                     ->where('deleted_at', NULL)
                     ->orderBy('updated_at', 'asc')
                     ->dBread()

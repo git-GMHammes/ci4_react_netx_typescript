@@ -15,16 +15,17 @@ class _AuthPageState extends State<AuthPage> {
   final _senhaController = TextEditingController();
   final _tokenController = TextEditingController();
 
-  String _perfilSelecionado = 'Usuário'; // Valor padrão
-  bool _obscureText = true; // Para o campo de senha
+  // Agora, o perfil é um Map de chave em inglês para valor em português
+  final Map<String, String> _perfis = {
+    'admin': 'Administrador',
+    'user': 'Usuário',
+    'client': 'Cliente',
+    'seller': 'Vendedor',
+    'supplier': 'Fornecedor',
+  };
 
-  final List<String> _perfis = [
-    'Administrador',
-    'Usuário',
-    'Cliente',
-    'Vendedor',
-    'Fornecedor',
-  ];
+  String _perfilSelecionado = 'user';
+  bool _obscureText = true;
 
   @override
   void dispose() {
@@ -41,7 +42,7 @@ class _AuthPageState extends State<AuthPage> {
         const SnackBar(content: Text('Autenticação em andamento...')),
       );
 
-      // Simulação de autenticação - em um app real você enviaria para API
+      // Simulação de autenticação
       if (kDebugMode) {
         print('Usuário: ${_usuarioController.text}');
       }
@@ -52,10 +53,10 @@ class _AuthPageState extends State<AuthPage> {
         print('Token: ${_tokenController.text}');
       }
       if (kDebugMode) {
-        print('Perfil: $_perfilSelecionado');
+        print('Perfil (key): $_perfilSelecionado');
       }
 
-      // Aqui você faria a chamada para autenticar o usuário
+      // Aqui você faria a chamada para autenticar o usuário, enviando a chave (em inglês)
     }
   }
 
@@ -161,13 +162,12 @@ class _AuthPageState extends State<AuthPage> {
                       border: OutlineInputBorder(),
                     ),
                     value: _perfilSelecionado,
-                    items:
-                        _perfis.map((String perfil) {
-                          return DropdownMenuItem<String>(
-                            value: perfil,
-                            child: Text(perfil),
-                          );
-                        }).toList(),
+                    items: _perfis.entries.map((entry) {
+                      return DropdownMenuItem<String>(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      );
+                    }).toList(),
                     onChanged: (String? newValue) {
                       if (newValue != null) {
                         setState(() {
