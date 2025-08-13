@@ -259,6 +259,12 @@ class ApiController extends ResourceController
                 $resposta = 'Código de status HTTP 401 Unauthorized. O servidor não conseguiu autenticar a solicitação porque as credenciais fornecidas (login e password) estão incorretas ou ausentes. Esse erro ocorre quando o acesso ao recurso solicitado requer autenticação válida, mas as informações enviadas não são reconhecidas ou não foram fornecidas. Para corrigir, verifique se o login e a password estão corretos e envie as credenciais apropriadas no cabeçalho da requisição.';
                 break;
 
+            case 405:
+                $status = 'error';
+                $message = 'Método HTTP não permitido.';
+                $resposta = 'Código de status HTTP 405 Method Not Allowed. Indica que o método HTTP utilizado (como GET, PUT, DELETE) não é permitido para o recurso solicitado. Por exemplo, se a API espera um POST e recebe um GET, essa resposta será retornada. Para corrigir, verifique a documentação da API e utilize o método HTTP correto para a operação desejada.';
+                break;
+
             case 409:
                 $status = 'error';
                 $message = 'Conflito, recurso, existente.';
@@ -373,7 +379,6 @@ class ApiController extends ResourceController
         $id = isset($processRequest['id']) ? ($processRequest['id']) : ($parameter);
         #
         try {
-            myPrint('$processRequest :: ', $processRequest);
             #
             $requestDb = [];
             $passwordInformada = '';
@@ -409,6 +414,156 @@ class ApiController extends ResourceController
             $message = $e->getMessage();
             $response = $this->getResponseApiRest($getMethod, $code, $message);
             return $this->response->setStatusCode($code)->setJSON($response);
+        }
+    }
+
+    private function firstStepLogin($processRequest, $page = 1, $limit = 10): mixed
+    {
+        $requestDb = [];
+        try {
+            if (isset($processRequest['user'])) {
+                $requestDb = $this->DbController->dbReadLogin($processRequest['user'], $page, $limit);
+            }
+            #
+            if (
+                isset($requestDb['dbResponse'])
+                && is_array($requestDb['dbResponse'])
+                && count($requestDb['dbResponse']) === 1
+                && isset($requestDb['dbResponse'][0])
+            ) {
+                return $requestDb['dbResponse'][0];
+            }
+
+            return $requestDb;
+        } catch (\Exception $e) {
+            $code = 500;
+            $message = $e->getMessage();
+            $response = $this->getResponseApiRest('POST', $code, $message);
+            return $this->response->setStatusCode($code)->setJSON($response);
+        }
+    }
+
+    private function secondStepPassword($processRequest, $page = 1, $limit = 10): mixed
+    {
+        $requestDb = [];
+        if (
+            isset($processRequest['user'])
+            && isset($processRequest['password'])
+        ) {
+            $requestDb = $this->DbController->dbReadLogin($processRequest['user'], $page, $limit);
+            $passwordInformada = $processRequest['password'];
+        }
+        #
+        if (
+            isset($requestDb['dbResponse'])
+            && is_array($requestDb['dbResponse'])
+            && count($requestDb['dbResponse']) === 1
+            && isset($requestDb['dbResponse'][0])
+        ) {
+            $requestDb = $requestDb['dbResponse'][0];
+        }
+        if (isset($requestDb['password'])) {
+            $passwordHashBanco = $requestDb['password'];
+            $verifyLogin = password_verify($passwordInformada, $passwordHashBanco);
+        }
+        if ($verifyLogin) {
+            $requestDb = $processRequest;
+        }
+        return $requestDb;
+    }
+
+    private function thirdTokenStage($processRequest, $page = 1, $limit = 10): mixed
+    {
+        return [];
+    }
+
+    private function fourthStagePassword($processRequest, $page = 1, $limit = 10): mixed
+    {
+        return [];
+    }
+
+    # route POST /www/index.php/habilidade/gerenciamento/usuario/api/estadologin/(:any)
+    # route GET /www/index.php/habilidade/gerenciamento/usuario/api/estadologin/(:any)
+    # Informação sobre o controller
+    # retorno do controller [JSON]
+    public function stageAuthentication($parameter = NULL)
+    {
+        # Parâmentros para receber um POST
+        $requestDb = [];
+        $request = service('request');
+        $getMethod = $request->getMethod();
+        $pageGet = $this->request->getGet('page');
+        $limitGet = $this->request->getGet('limit');
+        $limit = (isset($limitGet) && !empty($limitGet)) ? ($limitGet) : (10);
+        $page = (isset($pageGet) && !empty($pageGet)) ? ($pageGet) : (1);
+        $processRequest = (array) $request->getVar();
+        $json = isset($processRequest['json']) && $processRequest['json'] == 1 ? 1 : 0;
+        $id = isset($processRequest['id']) ? ($processRequest['id']) : ($parameter);
+        #
+        $processRequest = array_filter($processRequest);
+        // myPrint('$processRequest :: ', $processRequest);
+        #
+        if ($getMethod === 'GET') {
+            $code = 405;
+            $response = $this->getResponseApiRest($getMethod, $code);
+            return $this->response->setStatusCode($code)->setJSON($response);
+        }
+        #
+        try {
+            #
+            if (
+                isset($processRequest['user'])
+                && !isset($processRequest['password'])
+                && !isset($processRequest['token'])
+                && !isset($processRequest['profile'])
+            ) {
+                $requestDb = $this->firstStepLogin($processRequest);
+            }
+            if (
+                isset($processRequest['user'])
+                && isset($processRequest['password'])
+                && !isset($processRequest['token'])
+                && !isset($processRequest['profile'])
+            ) {
+                $requestDb = $this->secondStepPassword($processRequest);
+            }
+            myPrint('$requestDb :: ', $requestDb);
+            if (
+                isset($processRequest['user'])
+                && isset($processRequest['password'])
+                && isset($processRequest['token'])
+                && !isset($processRequest['profile'])
+            ) {
+                $requestDb = $this->thirdTokenStage($processRequest);
+            }
+            if (
+                isset($processRequest['user'])
+                && isset($processRequest['password'])
+                && isset($processRequest['token'])
+                && isset($processRequest['profile'])
+            ) {
+                $requestDb = $this->fourthStagePassword($processRequest);
+            }
+            #
+            if ($requestDb === []) {
+                $code = 401;
+                $response = $this->getResponseApiRest($getMethod, $code);
+                return $this->response->setStatusCode($code)->setJSON($response);
+            }
+            #
+            $apiRespond = $this->setApiRespond('success', $getMethod, $requestDb);
+            $response = $this->response->setStatusCode(201)->setJSON($apiRespond);
+        } catch (\Exception $e) {
+            $apiRespond = $this->setApiRespond('error', $getMethod, $requestDb, $e->getMessage());
+            // myPrint('Exception $e :: ', $e->getMessage());
+            $response = $this->response->setStatusCode(500)->setJSON($apiRespond);
+        }
+        if ($json == 1) {
+            return $response;
+            // return redirect()->back();
+            // return redirect()->to('project/endpoint/parameter/parameter/' . $parameter);
+        } else {
+            return $response;
         }
     }
 

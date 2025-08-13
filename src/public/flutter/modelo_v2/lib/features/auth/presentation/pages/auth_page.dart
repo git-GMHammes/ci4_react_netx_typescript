@@ -15,7 +15,6 @@ class _AuthPageState extends State<AuthPage> {
   final _senhaController = TextEditingController();
   final _tokenController = TextEditingController();
 
-  // Agora, o perfil é um Map de chave em inglês para valor em português
   final Map<String, String> _perfis = {
     'admin': 'Administrador',
     'user': 'Usuário',
@@ -37,27 +36,105 @@ class _AuthPageState extends State<AuthPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Processar dados do formulário
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Autenticação em andamento...')),
       );
-
-      // Simulação de autenticação
       if (kDebugMode) {
         print('Usuário: ${_usuarioController.text}');
       }
-      if (kDebugMode) {
-        print('Senha: ${_senhaController.text}');
-      }
-      if (kDebugMode) {
-        print('Token: ${_tokenController.text}');
-      }
-      if (kDebugMode) {
-        print('Perfil (key): $_perfilSelecionado');
-      }
-
-      // Aqui você faria a chamada para autenticar o usuário, enviando a chave (em inglês)
+      // Aqui você faria a chamada para autenticar o usuário.
     }
+  }
+
+  // Widget do campo de usuário (ativo)
+  Widget _buildUsuarioField() {
+    return TextFormField(
+      controller: _usuarioController,
+      decoration: const InputDecoration(
+        labelText: 'Usuário',
+        prefixIcon: Icon(Icons.person),
+        border: OutlineInputBorder(),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Por favor, insira seu nome de usuário';
+        }
+        return null;
+      },
+    );
+  }
+
+  // Widget do campo de senha (desabilitado)
+  Widget _buildSenhaField() {
+    return TextFormField(
+      controller: _senhaController,
+      obscureText: _obscureText,
+      enabled: false, // desabilitado
+      decoration: InputDecoration(
+        labelText: 'Senha',
+        prefixIcon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+          onPressed: null, // desabilitado
+        ),
+        border: const OutlineInputBorder(),
+      ),
+    );
+  }
+
+  // Widget do campo de token (desabilitado)
+  Widget _buildTokenField() {
+    return TextFormField(
+      controller: _tokenController,
+      enabled: false, // desabilitado
+      decoration: const InputDecoration(
+        labelText: 'Token',
+        prefixIcon: Icon(Icons.vpn_key),
+        border: OutlineInputBorder(),
+      ),
+    );
+  }
+
+  // Widget do campo de perfil (dropdown desabilitado)
+  Widget _buildPerfilDropdown() {
+    return DropdownButtonFormField<String>(
+      decoration: const InputDecoration(
+        labelText: 'Perfil',
+        prefixIcon: Icon(Icons.badge),
+        border: OutlineInputBorder(),
+      ),
+      value: _perfilSelecionado,
+      items: _perfis.entries.map((entry) {
+        return DropdownMenuItem<String>(
+          value: entry.key,
+          child: Text(entry.value),
+        );
+      }).toList(),
+      onChanged: null, // desabilitado
+    );
+  }
+
+  // Widget do botão de entrar
+  Widget _buildEntrarButton() {
+    return ElevatedButton(
+      onPressed: _submitForm,
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: const Text(
+        'ENTRAR',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  // Widget do link de recuperação de senha (desabilitado)
+  Widget _buildEsqueceuSenha() {
+    return TextButton(
+      onPressed: null, // desabilitado
+      child: const Text('Esqueceu sua senha?'),
+    );
   }
 
   @override
@@ -90,126 +167,23 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Campo de Usuário
-                  TextFormField(
-                    controller: _usuarioController,
-                    decoration: const InputDecoration(
-                      labelText: 'Usuário',
-                      prefixIcon: Icon(Icons.person),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira seu nome de usuário';
-                      }
-                      return null;
-                    },
-                  ),
+                  // Campos do formulário usando os widgets criados
+                  _buildUsuarioField(),
                   const SizedBox(height: 16),
 
-                  // Campo de Senha
-                  TextFormField(
-                    controller: _senhaController,
-                    obscureText: _obscureText,
-                    decoration: InputDecoration(
-                      labelText: 'Senha',
-                      prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      ),
-                      border: const OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira sua senha';
-                      }
-                      return null;
-                    },
-                  ),
+                  _buildSenhaField(),
                   const SizedBox(height: 16),
 
-                  // Campo de Token
-                  TextFormField(
-                    controller: _tokenController,
-                    decoration: const InputDecoration(
-                      labelText: 'Token',
-                      prefixIcon: Icon(Icons.vpn_key),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, insira o token de autenticação';
-                      }
-                      return null;
-                    },
-                  ),
+                  _buildTokenField(),
                   const SizedBox(height: 16),
 
-                  // Campo de Perfil (Dropdown)
-                  DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(
-                      labelText: 'Perfil',
-                      prefixIcon: Icon(Icons.badge),
-                      border: OutlineInputBorder(),
-                    ),
-                    value: _perfilSelecionado,
-                    items: _perfis.entries.map((entry) {
-                      return DropdownMenuItem<String>(
-                        value: entry.key,
-                        child: Text(entry.value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          _perfilSelecionado = newValue;
-                        });
-                      }
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, selecione um perfil';
-                      }
-                      return null;
-                    },
-                  ),
+                  _buildPerfilDropdown(),
                   const SizedBox(height: 32),
 
-                  // Botão de Entrar
-                  ElevatedButton(
-                    onPressed: _submitForm,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'ENTRAR',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  _buildEntrarButton(),
                   const SizedBox(height: 16),
 
-                  // Link para recuperação de senha
-                  TextButton(
-                    onPressed: () {
-                      // Navegar para página de recuperação de senha
-                    },
-                    child: const Text('Esqueceu sua senha?'),
-                  ),
+                  _buildEsqueceuSenha(),
                 ],
               ),
             ),

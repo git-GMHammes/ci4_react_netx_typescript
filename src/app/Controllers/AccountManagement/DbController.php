@@ -85,7 +85,7 @@ class DbController extends BaseController
     public function dbCreate($parameter = NULL)
     {
         $parameter = $this->dbFields($parameter);
-        myPrint($parameter, 'src\app\Controllers\ExempleDbController.php');
+        // myPrint($parameter, 'src\app\Controllers\ExempleDbController.php');
         $parameter['profile'] = isset($parameter['profile']) ? $parameter['profile'] : 'usuario';
         try {
             $this->ModelUserManagement->dbCreate($this->dbFields($parameter));
@@ -165,6 +165,9 @@ class DbController extends BaseController
     # retorno do controller [JSON]
     public function dbReadLogin($parameter = NULL, $page = 1, $limit = 10)
     {
+        // myPrint('$parameter :: ', $parameter, true);
+        // myPrint('$page :: ', $page, true);
+        // myPrint('$limit :: ', $limit);
         try {
             if ($parameter !== NULL) {
                 $dbResponse = $this
@@ -173,7 +176,7 @@ class DbController extends BaseController
                     ->where('deleted_at', NULL)
                     ->orderBy('updated_at', 'asc')
                     ->dBread()
-                    ->paginate(1, 'paginator', $page);
+                    ->paginate($limit, 'paginator', $page);
                 //
             } else {
                 $dbResponse = $this

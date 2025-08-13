@@ -47,6 +47,12 @@ $routes->group('habilidade', function ($routes) {
                 $routes->get('login/(:any)', 'AccountManagement\ApiController::AccountLogin/$1');
                 $routes->post('login', 'AccountManagement\ApiController::AccountLogin');
                 $routes->post('login/(:any)', 'AccountManagement\ApiController::AccountLogin/$1');
+                # www/index.php/habilidade/gerenciamento/usuario/api/estadologin/(:any)
+                $routes->get('estadologin', 'AccountManagement\ApiController::stageAuthentication');
+                $routes->get('estadologin/(:segment)', 'AccountManagement\ApiController::stageAuthentication/$1');
+                $routes->get('estadologin/(:any)', 'AccountManagement\ApiController::stageAuthentication/$1');
+                $routes->post('estadologin', 'AccountManagement\ApiController::stageAuthentication');
+                $routes->post('estadologin/(:any)', 'AccountManagement\ApiController::stageAuthentication/$1');
             });
         });
     });
