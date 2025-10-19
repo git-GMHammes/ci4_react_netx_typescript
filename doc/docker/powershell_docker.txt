@@ -9,12 +9,18 @@ cd C:\laragon\www\ci4_react_netx_typescript\
 docker stop $(docker ps -aq)
 docker-compose up --build -d
 
+clear
+Start-Process "C:\Program Files\Docker\Docker\frontend\Docker Desktop.exe"
+Start-Sleep -Seconds 10
+
+clear
 cd C:\laragon\www\ci4_react_netx_typescript\
 docker-compose build --no-cache
 docker-compose up --build -d
  
 ### Destroi TUDO e limpa o ambiente:
 
+cd C:\laragon\www\ci4_react_netx_typescript\
 docker stop $(docker ps -aq)
 docker rm -f $(docker ps -aq)
 docker rmi -f $(docker images -q)
@@ -23,4 +29,9 @@ docker volume rm devopsteste_db-data -f
 docker network prune -f
 docker-compose down
 docker system prune -af
+ 
+clear
+cd C:\laragon\www\ci4_react_netx_typescript\
+docker-compose build --no-cache
+docker-compose up --build -d
  

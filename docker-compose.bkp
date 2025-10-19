@@ -1,12 +1,36 @@
 services:
   php:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: php:8.2-apache
     container_name: nextjs-php
     restart: always
     ports:
       - "127.0.0.1:56401:80"
+    volumes:
+      - ./src:/var/www/html/src
+    command: |
+      bash -c "
+      echo 'ServerName localhost' >> /etc/apache2/apache2.conf &&
+      apt-get update &&
+      apt-get install -y libicu-dev default-mysql-client &&
+      docker-php-ext-install intl pdo pdo_mysql mysqli &&
+      a2enmod rewrite &&
+      cat > /etc/apache2/sites-available/000-default.conf <<'EOL'
+      <VirtualHost *:80>
+          ServerAdmin webmaster@localhost
+          DocumentRoot /var/www/html
+          ServerName localhost
+
+          <Directory /var/www/html>
+              Options +Indexes +FollowSymLinks
+              AllowOverride All
+              Require all granted
+          </Directory>
+
+          ErrorLog \${APACHE_LOG_DIR}/error.log
+          CustomLog \${APACHE_LOG_DIR}/access.log combined
+      </VirtualHost>
+      EOL
+      apache2-foreground"
     working_dir: /var/www/html
     environment:
       - PHP_MEMORY_LIMIT=256M
@@ -31,6 +55,7 @@ services:
       - mysql-sgp
       - mysql-sgc
 
+  # Banco de dados 1: nextjs
   mysql-nextjs:
     image: mysql:8.0
     container_name: mysql-nextjs
@@ -50,6 +75,7 @@ services:
       - ./mysql/nextjs/mysql-data:/var/lib/mysql
       - ./mysql/nextjs/mysql-init:/docker-entrypoint-initdb.d
 
+  # Banco de dados 2: qlikadmin
   mysql-qlikadmin:
     image: mysql:8.0
     container_name: mysql-qlikadmin2
@@ -69,6 +95,7 @@ services:
       - ./mysql/qlikadmin/mysql-data:/var/lib/mysql
       - ./mysql/qlikadmin/mysql-init:/docker-entrypoint-initdb.d
 
+  # Banco de dados 3: sgp
   mysql-sgp:
     image: mysql:8.0
     container_name: mysql-sgp2
@@ -88,6 +115,7 @@ services:
       - ./mysql/sgp/mysql-data:/var/lib/mysql
       - ./mysql/sgp/mysql-init:/docker-entrypoint-initdb.d
 
+  # Banco de dados 4: sgc
   mysql-sgc:
     image: mysql:8.0
     container_name: mysql-sgc2
@@ -107,6 +135,7 @@ services:
       - ./mysql/sgc/mysql-data:/var/lib/mysql
       - ./mysql/sgc/mysql-init:/docker-entrypoint-initdb.d
 
+  # Banco de dados 5: intranetdeegase
   mysql-intranetdeegase:
     image: mysql:8.0
     container_name: mysql-intranetdeegase2

@@ -5,8 +5,11 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
+
+exit('FIM - 2');
+
 // $routes->get('/', 'Home::index');
-$routes->addRedirect('/', '/home');
+// $routes->addRedirect('/', '/home');
 $routes->get('/home', 'Home::index');
 
 # www/index.php/habilidade/anonymous/(:any)

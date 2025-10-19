@@ -15,3 +15,6 @@ src/writable/debugbar/debugbar_*
 src/writable/logs/log*
 src/writable/session/*
 src/app/Config/Constants.php
+src/public/writable/debugbar/debugbar_*
+src/public/writable/logs/log*
+src/public/writable/session/ci_*
